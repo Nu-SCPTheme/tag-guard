@@ -24,6 +24,8 @@
 //! The actual meaning of the tags, or what objects they are applied
 //! to is up to the consumer of the library.
 
+extern crate easy_strings;
+
 #[macro_use]
 extern crate serde;
 extern crate toml;
@@ -37,7 +39,7 @@ mod test;
 
 pub use self::engine::Engine;
 pub use self::error::Error;
-pub use self::tag::{Tag, TagPool};
+pub use self::tag::{Role, Tag, TagPool, TagSpec};
 
 pub type StdResult<T, E> = std::result::Result<T, E>;
 pub type Result<T> = StdResult<T, Error>;

@@ -1,5 +1,5 @@
 /*
- * engine.rs
+ * tag/mod.rs
  *
  * tag-guard - Configurable tag enforcement library
  * Copyright (c) 2019 Ammon Smith
@@ -10,15 +10,12 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use super::prelude::*;
+mod pool;
+mod role;
+mod spec;
+mod tag;
 
-#[derive(Debug)]
-pub struct Engine {
-    pool: TagPool,
-}
-
-impl Engine {
-    pub fn new(_: ()) -> Self {
-        unimplemented!()
-    }
-}
+pub use self::pool::TagPool;
+pub use self::role::Role;
+pub use self::spec::TagSpec;
+pub use self::tag::Tag;

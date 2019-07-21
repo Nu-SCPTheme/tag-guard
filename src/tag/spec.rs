@@ -1,5 +1,5 @@
 /*
- * engine.rs
+ * tag/spec.rs
  *
  * tag-guard - Configurable tag enforcement library
  * Copyright (c) 2019 Ammon Smith
@@ -10,15 +10,11 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use super::prelude::*;
+use super::{Role, Tag};
 
-#[derive(Debug)]
-pub struct Engine {
-    pool: TagPool,
-}
-
-impl Engine {
-    pub fn new(_: ()) -> Self {
-        unimplemented!()
-    }
+#[derive(Debug, Clone)]
+pub struct TagSpec {
+    required_tags: Vec<Tag>,
+    conflicting_tags: Vec<Tag>,
+    required_roles: Vec<Role>,
 }
