@@ -11,27 +11,63 @@
  */
 
 use std::error::Error as StdError;
-use std::fmt;
+use std::fmt::{self, Display};
+use super::Tag;
 
 #[must_use = "should handle errors"]
 #[derive(Debug)]
 pub enum Error {
-    RequiresTags((), Vec<()>),
-    IncompatibleTags((), ()),
+    /// The tag cannot be applied unless the others are also present.
+    RequiresTags(Tag, Vec<Tag>),
+
+    /// The two tags cannot be applied together, as they conflict.
+    IncompatibleTags(Tag, Tag),
+
+    /// The given tag is not registered in the [`Engine`].
+    /// [`Engine`]: ./engine.html
+    MissingTag(Tag),
+
+    /// The given tag name could not be found.
+    NoSuchTag(String),
 }
 
 impl StdError for Error {
     fn description(&self) -> &str {
-        unimplemented!()
+        use self::Error::*;
+
+        match *self {
+            RequiresTags(_, _) => "Tag missing requirements",
+            IncompatibleTags(_, _) => "Tags conflict",
+            MissingTag(_) => "Tag not found in Engine",
+            NoSuchTag(_) => "No tag with that name",
+        }
     }
 
-    fn source(&self) -> Option<&(dyn StdError + 'static)> {
+    fn source(&self) -> Option<&(StdError + 'static)> {
         None
     }
 }
 
-impl fmt::Display for Error {
+impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", StdError::description(self))
+        use self::Error::*;
+
+        write!(f, "{}: ", StdError::description(self))?;
+
+        match *self {
+            RequiresTags(ref tag, ref needed) => {
+                write!(f, "{} needs ", tag)?;
+
+                for (i, tag) in needed.iter().enumerate() {
+                    let comma = if i < needed.len() - 1 { ", " } else { "" };
+                    write!(f, "{}{}", tag, comma)?;
+                }
+
+                Ok(())
+            }
+            IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
+            MissingTag(ref tag) => write!(f, "{}", tag),
+            NoSuchTag(ref name) => write!(f, "{}", name),
+        }
     }
 }

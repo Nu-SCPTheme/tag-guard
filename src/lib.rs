@@ -28,6 +28,9 @@ extern crate easy_strings;
 
 #[macro_use]
 extern crate serde;
+
+#[macro_use]
+extern crate str_macro;
 extern crate toml;
 
 mod engine;
@@ -39,11 +42,11 @@ mod test;
 
 pub use self::engine::Engine;
 pub use self::error::Error;
-pub use self::tag::{Role, Tag, TagPool, TagSpec};
+pub use self::tag::{Role, Tag, TagSpec};
 
 pub type StdResult<T, E> = std::result::Result<T, E>;
 pub type Result<T> = StdResult<T, Error>;
 
 pub mod prelude {
-    pub use super::{Engine, Error, Tag, TagPool};
+    pub use super::{Engine, Error, Role, Tag, TagSpec};
 }

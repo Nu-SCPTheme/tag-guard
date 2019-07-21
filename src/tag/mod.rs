@@ -10,12 +10,10 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-mod pool;
 mod role;
 mod spec;
 mod tag;
 
-pub use self::pool::TagPool;
 pub use self::role::Role;
 pub use self::spec::TagSpec;
 pub use self::tag::Tag;

@@ -12,6 +12,8 @@
 
 use easy_strings::EZString;
 use std::borrow::Borrow;
+use std::fmt::{self, Display};
+use std::ops::Deref;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Role(EZString);
@@ -45,5 +47,19 @@ impl Borrow<str> for Role {
 impl Borrow<String> for Role {
     fn borrow(&self) -> &String {
         &self.0
+    }
+}
+
+impl Deref for Role {
+    type Target = str;
+
+    fn deref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl Display for Role {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", &self)
     }
 }

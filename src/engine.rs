@@ -10,15 +10,44 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
+use crate::{Error, Result};
+use std::borrow::Borrow;
+use std::collections::{HashMap, HashSet};
 use super::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Engine {
-    pool: TagPool,
+    specs: HashMap<Tag, TagSpec>,
+    tags: HashSet<Tag>,
 }
 
 impl Engine {
-    pub fn new(_: ()) -> Self {
+    pub fn add_tag(&mut self, _: ()) {
         unimplemented!()
+    }
+
+    pub fn get_spec(&self, tag: &Tag) -> Result<&TagSpec> {
+        match self.specs.get(tag) {
+            Some(spec) => Ok(spec),
+            None => Err(Error::MissingTag(Tag::clone(tag))),
+        }
+    }
+
+    pub fn get_tag<B: Borrow<str>>(&self, name: B) -> Result<Tag> {
+        let name = name.borrow();
+
+        match self.tags.get(name) {
+            Some(tag) => Ok(Tag::clone(tag)),
+            None => Err(Error::NoSuchTag(str!(name))),
+        }
+    }
+
+    pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
+        for tag in tags {
+            let spec = self.get_spec(&tag)?;
+            spec.check_tags(tag, tags)?;
+        }
+
+        Ok(())
     }
 }

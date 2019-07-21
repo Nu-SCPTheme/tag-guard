@@ -12,6 +12,8 @@
 
 use easy_strings::EZString;
 use std::borrow::Borrow;
+use std::fmt::{self, Display};
+use std::ops::Deref;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Tag(EZString);
@@ -45,5 +47,19 @@ impl Borrow<str> for Tag {
 impl Borrow<String> for Tag {
     fn borrow(&self) -> &String {
         &self.0
+    }
+}
+
+impl Deref for Tag {
+    type Target = str;
+
+    fn deref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl Display for Tag {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", &self)
     }
 }
