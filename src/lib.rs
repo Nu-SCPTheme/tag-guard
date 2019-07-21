@@ -29,18 +29,19 @@ extern crate serde;
 extern crate toml;
 
 mod engine;
-mod enums;
 mod error;
 mod tag;
 
+#[cfg(test)]
+mod test;
+
 pub use self::engine::Engine;
 pub use self::error::Error;
-pub use self::enums::Condition;
 pub use self::tag::{Tag, TagPool};
 
 pub type StdResult<T, E> = std::result::Result<T, E>;
 pub type Result<T> = StdResult<T, Error>;
 
 pub mod prelude {
-    pub use super::{Engine, Error, Condition, Tag, TagPool};
+    pub use super::{Engine, Error, Tag, TagPool};
 }

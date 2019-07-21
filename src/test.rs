@@ -1,5 +1,5 @@
 /*
- * enums.rs
+ * test.rs
  *
  * tag-guard - Configurable tag enforcement library
  * Copyright (c) 2019 Ammon Smith
@@ -10,8 +10,4 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-#[derive(Debug)]
-pub enum Condition<T> {
-    Requires(T),
-    Conflicts(T),
-}
+// TODO

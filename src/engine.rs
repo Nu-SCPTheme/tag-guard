@@ -15,8 +15,9 @@ use super::prelude::*;
 #[derive(Debug)]
 pub struct Engine {
     pool: TagPool,
-    tags: Vec<Condition<()>>, // TODO use Tag type
-    roles: Vec<Condition<()>>, // TODO figure out 'roles'
+    required_tags: Vec<()>, // TODO use Tag type
+    conflicting_tags: Vec<()>,
+    required_roles: Vec<()>, // TODO use Role type
 }
 
 impl Engine {
