@@ -26,6 +26,11 @@ impl Engine {
         unimplemented!()
     }
 
+    #[inline]
+    pub fn get_all(&self) -> &HashMap<Tag, TagSpec> {
+        &self.specs
+    }
+
     pub fn get_spec(&self, tag: &Tag) -> Result<&TagSpec> {
         match self.specs.get(tag) {
             Some(spec) => Ok(spec),
