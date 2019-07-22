@@ -52,6 +52,7 @@ impl TagSpec {
     }
 
     pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
+        // Ensure all requirements are met
         for required in &self.required_tags {
             if !tags.contains(required) {
                 let required_tags = self.required_tags.clone();
@@ -59,6 +60,7 @@ impl TagSpec {
             }
         }
 
+        // Ensure no conflicts are present
         for conflicts in &self.conflicting_tags {
             if tags.contains(conflicts) {
                 let conflicts = Tag::clone(conflicts);
@@ -69,27 +71,49 @@ impl TagSpec {
         Ok(())
     }
 
-    pub fn check_tag_additions(
+    pub fn check_tag_changes(
         &self,
-        new_tags: &[Tag],
+        added_tags: &[Tag],
+        removed_tags: &[Tag],
         tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
+        // Check for tags that are both added and removed
+        for tag in added_tags {
+            if removed_tags.contains(tag) {
+                return Err(Error::Other(
+                    "Tag present in both added_tags and removed_tags",
+                ));
+            }
+        }
+
+        // Ensure user has permission to change these tags
         for role in &self.required_roles {
             if !roles.contains(role) {
                 return Err(Error::MissingRole(Role::clone(role)));
             }
         }
 
+        // Local helper function
+        let has_tag = |tag| {
+            if !removed_tags.contains(tag) {
+                tags.contains(tag) || added_tags.contains(tag)
+            } else {
+                false
+            }
+        };
+
+        // Ensure all requirements are met
         for required in &self.required_tags {
-            if !(tags.contains(required) || new_tags.contains(required)) {
+            if !has_tag(required) {
                 let required_tags = self.required_tags.clone();
                 return Err(Error::RequiresTags(self.tag(), required_tags));
             }
         }
 
+        // Ensure no conflicts are present
         for conflicts in &self.conflicting_tags {
-            if tags.contains(conflicts) || new_tags.contains(conflicts) {
+            if has_tag(conflicts) {
                 let conflicts = Tag::clone(conflicts);
                 return Err(Error::IncompatibleTags(self.tag(), conflicts));
             }

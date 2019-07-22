@@ -32,6 +32,9 @@ pub enum Error {
 
     /// Unable to perform this operation due to lacking necessary access role.
     MissingRole(Role),
+
+    /// For uncommon error cases.
+    Other(&'static str),
 }
 
 impl StdError for Error {
@@ -44,6 +47,7 @@ impl StdError for Error {
             MissingTag(_) => "Tag not found in Engine",
             NoSuchTag(_) => "No tag with that name",
             MissingRole(_) => "Cannot apply tags without role",
+            Other(msg) => msg,
         }
     }
 
@@ -73,6 +77,7 @@ impl Display for Error {
             MissingTag(ref tag) => write!(f, "{}", tag),
             NoSuchTag(ref name) => write!(f, "{}", name),
             MissingRole(ref role) => write!(f, "{}", role),
+            Other(_) => Ok(()),
         }
     }
 }

@@ -72,4 +72,19 @@ impl Engine {
 
         Ok(())
     }
+
+    pub fn check_tag_changes(
+        &self,
+        added_tags: &[Tag],
+        removed_tags: &[Tag],
+        tags: &[Tag],
+        roles: &[Role],
+    ) -> Result<()> {
+        for tag in tags {
+            let spec = self.get_spec(&tag)?;
+            spec.check_tag_changes(added_tags, removed_tags, tags, roles)?;
+        }
+
+        Ok(())
+    }
 }
