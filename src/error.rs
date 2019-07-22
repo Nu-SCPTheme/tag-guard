@@ -65,22 +65,12 @@ impl Display for Error {
         match *self {
             RequiresTags(ref tag, ref needed) => {
                 write!(f, "{} needs ", tag)?;
-
-                for (i, tag) in needed.iter().enumerate() {
-                    let comma = if i < needed.len() - 1 { ", " } else { "" };
-                    write!(f, "{}{}", tag, comma)?;
-                }
-
+                write_items(f, needed)?;
                 Ok(())
             }
             MissingRoles(ref roles) => {
                 write!(f, "at least one of ")?;
-
-                for (i, role) in roles.iter().enumerate() {
-                    let comma = if i < roles.len() - 1 { ", " } else { "" };
-                    write!(f, "{}{}", role, comma)?;
-                }
-
+                write_items(f, roles)?;
                 Ok(())
             }
             IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
@@ -89,4 +79,13 @@ impl Display for Error {
             Other(_) => Ok(()),
         }
     }
+}
+
+fn write_items<D: Display>(f: &mut fmt::Formatter, items: &[D]) -> fmt::Result {
+    for (i, item) in items.iter().enumerate() {
+        let comma = if i < items.len() - 1 { ", " } else { "" };
+        write!(f, "{}{}", item, comma)?;
+    }
+
+    Ok(())
 }
