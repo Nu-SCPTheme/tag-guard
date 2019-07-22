@@ -12,7 +12,7 @@
 
 use std::error::Error as StdError;
 use std::fmt::{self, Display};
-use super::Tag;
+use super::{Role, Tag};
 
 #[must_use = "should handle errors"]
 #[derive(Debug)]
@@ -29,6 +29,9 @@ pub enum Error {
 
     /// The given tag name could not be found.
     NoSuchTag(String),
+
+    /// Unable to perform this operation due to lacking necessary access role.
+    MissingRole(Role),
 }
 
 impl StdError for Error {
@@ -40,6 +43,7 @@ impl StdError for Error {
             IncompatibleTags(_, _) => "Tags conflict",
             MissingTag(_) => "Tag not found in Engine",
             NoSuchTag(_) => "No tag with that name",
+            MissingRole(_) => "Cannot apply tags without role",
         }
     }
 
@@ -68,6 +72,7 @@ impl Display for Error {
             IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
             MissingTag(ref tag) => write!(f, "{}", tag),
             NoSuchTag(ref name) => write!(f, "{}", name),
+            MissingRole(ref role) => write!(f, "{}", role),
         }
     }
 }

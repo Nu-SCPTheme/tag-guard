@@ -14,29 +14,84 @@ use crate::{Error, Result};
 use super::{Role, Tag};
 
 #[derive(Debug, Clone)]
+pub struct TemplateTagSpec {
+    pub required_tags: Vec<Tag>,
+    pub conflicting_tags: Vec<Tag>,
+    pub required_roles: Vec<Role>,
+}
+
+#[derive(Debug)]
 pub struct TagSpec {
+    tag: Tag,
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,
     pub required_roles: Vec<Role>,
 }
 
 impl TagSpec {
-    pub fn check_tags(&self, tag: &Tag, tags: &[Tag]) -> Result<()> {
+    #[inline]
+    pub fn tag(&self) -> Tag {
+        Tag::clone(&self.tag)
+    }
+
+    #[inline]
+    pub fn from_template(tag: &Tag, spec: TemplateTagSpec) -> Self {
+        let tag = Tag::clone(tag);
+        let TemplateTagSpec {
+            required_tags,
+            conflicting_tags,
+            required_roles,
+        } = spec;
+
+        TagSpec {
+            tag,
+            required_tags,
+            conflicting_tags,
+            required_roles,
+        }
+    }
+
+    pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
         for required in &self.required_tags {
             if !tags.contains(required) {
-                let tag = Tag::clone(tag);
-                let required = self.required_tags.clone();
-
-                return Err(Error::RequiresTags(tag, required));
+                let required_tags = self.required_tags.clone();
+                return Err(Error::RequiresTags(self.tag(), required_tags));
             }
         }
 
         for conflicts in &self.conflicting_tags {
             if tags.contains(conflicts) {
-                let tag = Tag::clone(tag);
                 let conflicts = Tag::clone(conflicts);
+                return Err(Error::IncompatibleTags(self.tag(), conflicts));
+            }
+        }
 
-                return Err(Error::IncompatibleTags(tag, conflicts));
+        Ok(())
+    }
+
+    pub fn check_tag_additions(
+        &self,
+        new_tags: &[Tag],
+        tags: &[Tag],
+        roles: &[Role],
+    ) -> Result<()> {
+        for role in &self.required_roles {
+            if !roles.contains(role) {
+                return Err(Error::MissingRole(Role::clone(role)));
+            }
+        }
+
+        for required in &self.required_tags {
+            if !(tags.contains(required) || new_tags.contains(required)) {
+                let required_tags = self.required_tags.clone();
+                return Err(Error::RequiresTags(self.tag(), required_tags));
+            }
+        }
+
+        for conflicts in &self.conflicting_tags {
+            if tags.contains(conflicts) || new_tags.contains(conflicts) {
+                let conflicts = Tag::clone(conflicts);
+                return Err(Error::IncompatibleTags(self.tag(), conflicts));
             }
         }
 

@@ -15,5 +15,5 @@ mod spec;
 mod tag;
 
 pub use self::role::Role;
-pub use self::spec::TagSpec;
+pub use self::spec::{TagSpec, TemplateTagSpec};
 pub use self::tag::Tag;

@@ -22,8 +22,18 @@ pub struct Engine {
 }
 
 impl Engine {
-    pub fn add_tag(&mut self, _: ()) {
-        unimplemented!()
+    pub fn add_tag<S: AsRef<str>>(&mut self, name: S, spec: TemplateTagSpec) -> Tag {
+        let tag = Tag::new(name);
+        let spec = TagSpec::from_template(&tag, spec);
+
+        self.specs.insert(Tag::clone(&tag), spec);
+        self.tags.insert(Tag::clone(&tag));
+        tag
+    }
+
+    pub fn delete_tag(&mut self, tag: &Tag) {
+        self.specs.remove(tag);
+        self.tags.remove(tag);
     }
 
     #[inline]
@@ -33,6 +43,13 @@ impl Engine {
 
     pub fn get_spec(&self, tag: &Tag) -> Result<&TagSpec> {
         match self.specs.get(tag) {
+            Some(spec) => Ok(spec),
+            None => Err(Error::MissingTag(Tag::clone(tag))),
+        }
+    }
+
+    pub fn get_spec_mut(&mut self, tag: &Tag) -> Result<&mut TagSpec> {
+        match self.specs.get_mut(tag) {
             Some(spec) => Ok(spec),
             None => Err(Error::MissingTag(Tag::clone(tag))),
         }
@@ -50,7 +67,7 @@ impl Engine {
     pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tags(tag, tags)?;
+            spec.check_tags(tags)?;
         }
 
         Ok(())
