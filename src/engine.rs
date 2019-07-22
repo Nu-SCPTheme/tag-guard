@@ -19,6 +19,7 @@ use super::prelude::*;
 pub struct Engine {
     specs: HashMap<Tag, TagSpec>,
     tags: HashSet<Tag>,
+    groups: HashMap<Tag, HashSet<Tag>>, // TODO add groups
 }
 
 impl Engine {

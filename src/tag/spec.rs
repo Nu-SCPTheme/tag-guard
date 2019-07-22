@@ -17,7 +17,7 @@ use super::{Role, Tag};
 pub struct TemplateTagSpec {
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,
-    pub required_roles: Vec<Role>,
+    pub needed_roles: Vec<Role>,
 }
 
 #[derive(Debug)]
@@ -25,7 +25,7 @@ pub struct TagSpec {
     tag: Tag,
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,
-    pub required_roles: Vec<Role>,
+    pub needed_roles: Vec<Role>,
 }
 
 impl TagSpec {
@@ -40,15 +40,25 @@ impl TagSpec {
         let TemplateTagSpec {
             required_tags,
             conflicting_tags,
-            required_roles,
+            needed_roles,
         } = spec;
 
         TagSpec {
             tag,
             required_tags,
             conflicting_tags,
-            required_roles,
+            needed_roles,
         }
+    }
+
+    fn check_roles(&self, roles: &[Role]) -> Result<()> {
+        for role in roles {
+            if self.needed_roles.contains(role) {
+                return Ok(());
+            }
+        }
+
+        Err(Error::MissingRoles(self.needed_roles.clone()))
     }
 
     pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
@@ -88,11 +98,7 @@ impl TagSpec {
         }
 
         // Ensure user has permission to change these tags
-        for role in &self.required_roles {
-            if !roles.contains(role) {
-                return Err(Error::MissingRole(Role::clone(role)));
-            }
-        }
+        self.check_roles(roles)?;
 
         // Local helper function
         let has_tag = |tag| {

@@ -31,7 +31,7 @@ pub enum Error {
     NoSuchTag(String),
 
     /// Unable to perform this operation due to lacking necessary access role.
-    MissingRole(Role),
+    MissingRoles(Vec<Role>),
 
     /// For uncommon error cases.
     Other(&'static str),
@@ -46,7 +46,7 @@ impl StdError for Error {
             IncompatibleTags(_, _) => "Tags conflict",
             MissingTag(_) => "Tag not found in Engine",
             NoSuchTag(_) => "No tag with that name",
-            MissingRole(_) => "Cannot apply tags without role",
+            MissingRoles(_) => "Cannot apply tags without roles",
             Other(msg) => msg,
         }
     }
@@ -73,10 +73,19 @@ impl Display for Error {
 
                 Ok(())
             }
+            MissingRoles(ref roles) => {
+                write!(f, "at least one of ")?;
+
+                for (i, role) in roles.iter().enumerate() {
+                    let comma = if i < roles.len() - 1 { ", " } else { "" };
+                    write!(f, "{}{}", role, comma)?;
+                }
+
+                Ok(())
+            }
             IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
             MissingTag(ref tag) => write!(f, "{}", tag),
             NoSuchTag(ref name) => write!(f, "{}", name),
-            MissingRole(ref role) => write!(f, "{}", role),
             Other(_) => Ok(()),
         }
     }
