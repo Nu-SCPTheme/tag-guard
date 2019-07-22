@@ -11,9 +11,9 @@
  */
 
 use crate::{Error, Result};
+use crate::prelude::*;
 use std::borrow::Borrow;
 use std::collections::{HashMap, HashSet};
-use super::prelude::*;
 
 #[derive(Debug, Default)]
 pub struct Engine {

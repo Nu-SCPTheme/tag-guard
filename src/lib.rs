@@ -35,6 +35,7 @@ extern crate toml;
 
 mod engine;
 mod error;
+mod load;
 mod tag;
 
 #[cfg(test)]

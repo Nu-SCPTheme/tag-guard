@@ -1,0 +1,57 @@
+# An example configuration file for tag-guard.
+#
+# This describes relationships between various tags,
+# as well as defining groups which are used to ensure
+# controls are met.
+
+roles = [
+    "guest",
+    "member",
+    "licensing",
+    "staff",
+]
+
+[[tags]]
+# Name of the tag
+name = "scp"
+
+# Which group(s) it is in. Optional.
+groups = ["primary"]
+
+# Which role(s) a user needs to add/remove this tag.
+# If any of the roles in this list match (or it's empty)
+# then the user has permission.
+roles = ["member"]
+
+# Which other tags need to exist before this tag can be applied.
+requires = []
+
+# Which other tags this tag cannot be applied in conjunction with.
+conflicts-with = ["primary"]
+
+[[tags]]
+name = "tale"
+groups = ["primary"]
+roles = ["member"]
+
+[[tags]]
+name = "appliance"
+groups = ["attribute", "physical"]
+roles = ["member"]
+requires = ["scp"]
+
+[[tags]]
+name = "concept"
+groups = ["attribute"]
+roles = ["member"]
+requires = ["scp"]
+conflicts-with = ["physical"]
+
+[[tags]]
+name = "admin"
+roles = ["staff"]
+
+[[tags]]
+name = "_cc"
+groups = ["license"]
+roles = ["licensing", "staff"]
