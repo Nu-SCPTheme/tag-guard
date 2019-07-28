@@ -64,6 +64,10 @@ impl Engine {
 
     pub fn delete_role(&mut self, role: &Role) {
         self.roles.remove(role);
+
+        for (_, spec) in &mut self.specs {
+            spec.needed_roles.retain(|r| r != role);
+        }
     }
 
     #[inline]

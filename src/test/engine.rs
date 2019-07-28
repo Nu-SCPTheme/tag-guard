@@ -68,3 +68,16 @@ fn add_remove_groups() {
     engine.delete_group(&tag);
     assert_eq!(engine.has_tag("fruit"), false);
 }
+
+#[test]
+fn add_remove_roles() {
+    let mut engine = Engine::default();
+
+    assert_eq!(engine.has_role("admin"), false);
+    let role = engine.add_role("admin");
+    assert_eq!(engine.has_role("admin"), true);
+    assert_eq!(engine.has_tag("admin"), false);
+
+    engine.delete_role(&role);
+    assert_eq!(engine.has_role("fruit"), false);
+}
