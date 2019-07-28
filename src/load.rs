@@ -55,7 +55,7 @@ impl Configuration {
     fn apply_tags(tags: &[TagConfig], engine: &mut Engine) {
         let extant_tags = engine
             .get_tags()
-            .keys()
+            .iter()
             .map(Tag::clone)
             .collect::<HashSet<Tag>>();
 
@@ -119,14 +119,23 @@ impl Configuration {
                 mem::replace(&mut spec.conflicting_tags, conflicting_tags);
             }
 
-            /*
             // Update groups
             {
-                let groups = groups.iter().collect::<HashSet<_>>();
+                let groups = groups.unwrap_or_else(Vec::new);
+                let mut new_groups = Vec::new();
+
+                for name in groups {
+                    let group = match engine.get_tag(name.as_str()) {
+                        Ok(group) => group,
+                        Err(_) => engine.add_group(name),
+                    };
+
+                    new_groups.push(group);
+                }
+
                 let spec = engine.get_spec_mut(&current_tag)?;
-                mem::replace(&mut spec.groups, groups);
+                mem::replace(&mut spec.groups, new_groups);
             }
-            */
 
             // Update roles
             {

@@ -18,6 +18,7 @@ pub struct TemplateTagSpec {
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,
     pub needed_roles: Vec<Role>,
+    pub groups: Vec<Tag>,
 }
 
 #[derive(Debug)]
@@ -26,6 +27,7 @@ pub struct TagSpec {
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,
     pub needed_roles: Vec<Role>,
+    pub groups: Vec<Tag>,
 }
 
 impl TagSpec {
@@ -41,6 +43,7 @@ impl TagSpec {
             required_tags,
             conflicting_tags,
             needed_roles,
+            groups,
         } = spec;
 
         TagSpec {
@@ -48,6 +51,7 @@ impl TagSpec {
             required_tags,
             conflicting_tags,
             needed_roles,
+            groups,
         }
     }
 

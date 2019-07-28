@@ -20,7 +20,6 @@ pub struct Engine {
     specs: HashMap<Tag, TagSpec>,
     tags: HashSet<Tag>,
     roles: HashSet<Role>,
-    groups: HashMap<Tag, HashSet<Tag>>,
 }
 
 impl Engine {
@@ -36,6 +35,25 @@ impl Engine {
     pub fn delete_tag(&mut self, tag: &Tag) {
         self.specs.remove(tag);
         self.tags.remove(tag);
+
+        for (_, spec) in &mut self.specs {
+            spec.required_tags.retain(|t| t != tag);
+            spec.conflicting_tags.retain(|t| t != tag);
+        }
+    }
+
+    pub fn add_group<I: Into<String>>(&mut self, name: I) -> Tag {
+        let group = Tag::new(name);
+        self.tags.insert(Tag::clone(&group));
+        group
+    }
+
+    pub fn delete_group(&mut self, group: &Tag) {
+        self.tags.remove(group);
+
+        for (_, spec) in &mut self.specs {
+            spec.groups.retain(|g| g != group);
+        }
     }
 
     pub fn add_role<I: Into<String>>(&mut self, name: I) -> Role {
@@ -49,7 +67,12 @@ impl Engine {
     }
 
     #[inline]
-    pub fn get_tags(&self) -> &HashMap<Tag, TagSpec> {
+    pub fn get_tags(&self) -> &HashSet<Tag> {
+        &self.tags
+    }
+
+    #[inline]
+    pub fn get_specs(&self) -> &HashMap<Tag, TagSpec> {
         &self.specs
     }
 
