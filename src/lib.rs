@@ -43,6 +43,7 @@ mod test;
 
 pub use self::engine::Engine;
 pub use self::error::Error;
+pub use self::load::Configuration;
 pub use self::tag::{Role, Tag, TagSpec, TemplateTagSpec};
 
 pub type StdResult<T, E> = std::result::Result<T, E>;
