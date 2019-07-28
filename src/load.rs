@@ -11,6 +11,7 @@
  */
 
 use crate::prelude::*;
+use std::collections::HashSet;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Configuration {
@@ -18,11 +19,33 @@ pub struct Configuration {
     tags: Vec<TagConfig>,
 }
 
-impl Into<Engine> for Configuration {
-    fn into(self) -> Engine {
-        let mut engine = Engine::default();
+impl Configuration {
+    pub fn apply(self, engine: &mut Engine) {
+        let Configuration { roles, tags } = self;
 
-        unimplemented!()
+        Self::apply_roles(roles, engine);
+    }
+
+    fn apply_roles(roles: Vec<String>, engine: &mut Engine) {
+        let extant_roles = engine
+            .get_roles()
+            .iter()
+            .map(Role::clone)
+            .collect::<HashSet<Role>>();
+
+        // Remove roles
+        for extant_role in &extant_roles {
+            if !roles.contains(extant_role.as_ref()) {
+                engine.delete_role(&extant_role);
+            }
+        }
+
+        // Add new roles
+        for role in roles {
+            if !extant_roles.contains(&role) {
+                engine.add_role(role);
+            }
+        }
     }
 }
 

@@ -33,6 +33,9 @@ pub enum Error {
     /// Unable to perform this operation due to lacking necessary access role.
     MissingRoles(Vec<Role>),
 
+    /// The given role name could not be found.
+    NoSuchRole(String),
+
     /// For uncommon error cases.
     Other(&'static str),
 }
@@ -47,6 +50,7 @@ impl StdError for Error {
             MissingTag(_) => "Tag not found in Engine",
             NoSuchTag(_) => "No tag with that name",
             MissingRoles(_) => "Cannot apply tags without roles",
+            NoSuchRole(_) => "No role with that name",
             Other(msg) => msg,
         }
     }
@@ -76,6 +80,7 @@ impl Display for Error {
             IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
             MissingTag(ref tag) => write!(f, "{}", tag),
             NoSuchTag(ref name) => write!(f, "{}", name),
+            NoSuchRole(ref name) => write!(f, "{}", name),
             Other(_) => Ok(()),
         }
     }

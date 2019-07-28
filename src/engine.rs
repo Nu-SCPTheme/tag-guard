@@ -19,11 +19,12 @@ use std::collections::{HashMap, HashSet};
 pub struct Engine {
     specs: HashMap<Tag, TagSpec>,
     tags: HashSet<Tag>,
+    roles: HashSet<Role>,
     groups: HashMap<Tag, HashSet<Tag>>, // TODO add groups
 }
 
 impl Engine {
-    pub fn add_tag<S: AsRef<str>>(&mut self, name: S, spec: TemplateTagSpec) -> Tag {
+    pub fn add_tag<I: Into<String>>(&mut self, name: I, spec: TemplateTagSpec) -> Tag {
         let tag = Tag::new(name);
         let spec = TagSpec::from_template(&tag, spec);
 
@@ -37,9 +38,24 @@ impl Engine {
         self.tags.remove(tag);
     }
 
+    pub fn add_role<I: Into<String>>(&mut self, name: I) -> Role {
+        let role = Role::new(name);
+        self.roles.insert(Role::clone(&role));
+        role
+    }
+
+    pub fn delete_role(&mut self, role: &Role) {
+        self.roles.remove(role);
+    }
+
     #[inline]
     pub fn get_all(&self) -> &HashMap<Tag, TagSpec> {
         &self.specs
+    }
+
+    #[inline]
+    pub fn get_roles(&self) -> &HashSet<Role> {
+        &self.roles
     }
 
     pub fn get_spec(&self, tag: &Tag) -> Result<&TagSpec> {
@@ -56,12 +72,33 @@ impl Engine {
         }
     }
 
+    pub fn has_tag<B: Borrow<str>>(&self, name: B) -> bool {
+        let name = name.borrow();
+
+        self.tags.get(name).is_some()
+    }
+
     pub fn get_tag<B: Borrow<str>>(&self, name: B) -> Result<Tag> {
         let name = name.borrow();
 
         match self.tags.get(name) {
             Some(tag) => Ok(Tag::clone(tag)),
             None => Err(Error::NoSuchTag(str!(name))),
+        }
+    }
+
+    pub fn has_role<B: Borrow<str>>(&self, name: B) -> bool {
+        let name = name.borrow();
+
+        self.roles.get(name).is_some()
+    }
+
+    pub fn get_role<B: Borrow<str>>(&self, name: B) -> Result<Role> {
+        let name = name.borrow();
+
+        match self.roles.get(name) {
+            Some(role) => Ok(Role::clone(role)),
+            None => Err(Error::NoSuchRole(str!(name))),
         }
     }
 

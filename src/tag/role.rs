@@ -19,8 +19,8 @@ use std::ops::Deref;
 pub struct Role(EZString);
 
 impl Role {
-    pub fn new<S: AsRef<str>>(name: S) -> Self {
-        let name = name.as_ref();
+    pub fn new<I: Into<String>>(name: I) -> Self {
+        let name = name.into();
         assert_ne!(name, "", "Empty role names are not permitted");
         Role(EZString::from(name))
     }
