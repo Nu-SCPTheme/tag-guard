@@ -138,14 +138,38 @@ fn test_good_tags() {
 }
 
 #[test]
-fn test_basic_conflict() {
+fn test_no_tags() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($check_tags:expr, $err_tag:expr) => (
+            match engine.check_tags(&$check_tags).unwrap_err() {
+                Error::MissingTag(tag) => assert_eq!(tag, Tag::new($err_tag)),
+                error => panic!("Error wasn't MissingTag: {:?}", error),
+            }
+        )
+    }
+
+    check!(
+        [Tag::new("scp"), Tag::new("amorphous"), Tag::new("sliver")],
+        "sliver"
+    );
+
+    check!(
+        [Tag::new("tale"), Tag::new("_iamge")],
+        "_iamge"
+    )
+}
+
+#[test]
+fn test_conflicts() {
     let engine = setup();
 
     macro_rules! check {
         ($check_tags:expr, $err_tags:expr) => (
             match engine.check_tags(&$check_tags).unwrap_err() {
                 Error::RequiresTags(_, tags) => assert_eq!(tags, $err_tags),
-                _ => panic!("Error wasn't RequiresTags"),
+                error => panic!("Error wasn't RequiresTags: {:?}", error),
             }
         )
     }
