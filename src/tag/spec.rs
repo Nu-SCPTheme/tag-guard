@@ -92,8 +92,11 @@ impl TagSpec {
             }
         }
 
-        // Ensure user has permission to change these tags
-        self.check_roles(roles)?;
+        // Check if this tag was changed
+        if added_tags.contains(&self.tag) || removed_tags.contains(&self.tag) {
+            // If so, ensure user has permission to change this tag
+            self.check_roles(roles)?;
+        }
 
         // Local helper function
         let has_tag = |tag| {
