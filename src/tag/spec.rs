@@ -13,7 +13,7 @@
 use crate::{Error, Result};
 use super::{Role, Tag};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct TemplateTagSpec {
     pub required_tags: Vec<Tag>,
     pub conflicting_tags: Vec<Tag>,

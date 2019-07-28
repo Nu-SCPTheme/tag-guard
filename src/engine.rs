@@ -20,7 +20,7 @@ pub struct Engine {
     specs: HashMap<Tag, TagSpec>,
     tags: HashSet<Tag>,
     roles: HashSet<Role>,
-    groups: HashMap<Tag, HashSet<Tag>>, // TODO add groups
+    groups: HashMap<Tag, HashSet<Tag>>,
 }
 
 impl Engine {
@@ -49,7 +49,7 @@ impl Engine {
     }
 
     #[inline]
-    pub fn get_all(&self) -> &HashMap<Tag, TagSpec> {
+    pub fn get_tags(&self) -> &HashMap<Tag, TagSpec> {
         &self.specs
     }
 
