@@ -143,7 +143,7 @@ impl Engine {
     ) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tag_changes(added_tags, removed_tags, tags, roles)?;
+            spec.check_tag_changes(&self.specs, added_tags, removed_tags, tags, roles)?;
         }
 
         Ok(())

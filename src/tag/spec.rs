@@ -11,6 +11,7 @@
  */
 
 use crate::{Error, Result};
+use std::collections::HashMap;
 use super::{Role, Tag};
 
 #[derive(Debug, Clone, Default)]
@@ -87,6 +88,7 @@ impl TagSpec {
 
     pub fn check_tag_changes(
         &self,
+        specs: &HashMap<Tag, TagSpec>,
         added_tags: &[Tag],
         removed_tags: &[Tag],
         tags: &[Tag],
@@ -106,11 +108,20 @@ impl TagSpec {
 
         // Local helper function
         let has_tag = |tag| {
-            if !removed_tags.contains(tag) {
-                tags.contains(tag) || added_tags.contains(tag)
-            } else {
-                false
+            // Tag isn't present
+            if removed_tags.contains(tag) {
+                return false;
             }
+
+            for (_, spec) in specs {
+                // This group matches, as this tag is a member of it
+                if spec.groups.contains(tag) {
+                    return true;
+                }
+            }
+
+            // Is present in the tag list
+            tags.contains(tag) || added_tags.contains(tag)
         };
 
         // Ensure all requirements are met

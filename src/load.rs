@@ -61,8 +61,7 @@ impl Configuration {
 
         // Remove old tags
         for extant_tag in &extant_tags {
-            let contains = tags
-                .iter()
+            let contains = tags.iter()
                 .find(|tag| tag.name == extant_tag.as_ref())
                 .is_some();
 
