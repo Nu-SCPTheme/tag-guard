@@ -132,7 +132,7 @@ impl Engine {
     pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tags(tags)?;
+            spec.check_tags(&self.specs, tags)?;
         }
 
         Ok(())

@@ -66,24 +66,13 @@ impl TagSpec {
         Err(Error::MissingRoles(self.needed_roles.clone()))
     }
 
-    pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
-        // Ensure all requirements are met
-        for required in &self.required_tags {
-            if !tags.contains(required) {
-                let required_tags = self.required_tags.clone();
-                return Err(Error::RequiresTags(self.tag(), required_tags));
-            }
-        }
-
-        // Ensure no conflicts are present
-        for conflicts in &self.conflicting_tags {
-            if tags.contains(conflicts) {
-                let conflicts = Tag::clone(conflicts);
-                return Err(Error::IncompatibleTags(self.tag(), conflicts));
-            }
-        }
-
-        Ok(())
+    #[inline]
+    pub fn check_tags(
+        &self,
+        specs: &HashMap<Tag, TagSpec>,
+        tags: &[Tag],
+    ) -> Result<()> {
+        self.check_tag_changes(specs, &[], &[], tags, &[])
     }
 
     pub fn check_tag_changes(
