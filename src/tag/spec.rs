@@ -113,7 +113,12 @@ impl TagSpec {
                 return false;
             }
 
-            for (_, spec) in specs {
+            for (tag2, spec) in specs {
+                // Don't trigger for ourselves
+                if tag == tag2 {
+                    continue;
+                }
+
                 // This group matches, as this tag is a member of it
                 if spec.groups.contains(tag) {
                     return true;

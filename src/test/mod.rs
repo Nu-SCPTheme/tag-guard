@@ -10,4 +10,5 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
+mod check;
 mod engine;
