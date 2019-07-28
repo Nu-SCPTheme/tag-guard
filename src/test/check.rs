@@ -117,12 +117,33 @@ fn setup() -> Engine {
 }
 
 #[test]
+fn test_good_tags() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($check_tags:expr) => (
+            engine.check_tags(&$check_tags).unwrap()
+        )
+    }
+
+    check!([
+        Tag::new("scp"),
+        Tag::new("ontokinetic"),
+        Tag::new("humanoid"),
+        Tag::new("past-contest")
+    ]);
+    check!([Tag::new("scp"), Tag::new("amourphous"), Tag::new("_image")]);
+    check!([Tag::new("tale"), Tag::new("_cc")]);
+    check!([Tag::new("hub"), Tag::new("past-contest")])
+}
+
+#[test]
 fn test_basic_conflict() {
     let engine = setup();
 
     macro_rules! check {
         ($check_tags:expr, $err_tags:expr) => (
-            match engine.check_tags($check_tags).unwrap_err() {
+            match engine.check_tags(&$check_tags).unwrap_err() {
                 Error::RequiresTags(_, tags) => assert_eq!(tags, $err_tags),
                 _ => panic!("Error wasn't RequiresTags"),
             }
@@ -130,12 +151,11 @@ fn test_basic_conflict() {
     }
 
     check!(
-        &[Tag::new("ontokinetic"), Tag::new("humanoid")],
+        [Tag::new("ontokinetic"), Tag::new("humanoid")],
         [Tag::new("primary")]
     );
 
-    check!(
-        &[Tag::new("scp"), Tag::new("tale")],
-        [Tag::new("primary")]
-    );
+    check!([Tag::new("scp"), Tag::new("tale")], [Tag::new("primary")]);
+
+    check!([Tag::new("_image"), Tag::new("_cc")], [Tag::new("_cc")]);
 }
