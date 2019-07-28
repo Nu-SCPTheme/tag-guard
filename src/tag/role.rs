@@ -12,10 +12,10 @@
 
 use easy_strings::EZString;
 use std::borrow::Borrow;
-use std::fmt::{self, Display};
+use std::fmt::{self, Debug, Display};
 use std::ops::Deref;
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 pub struct Role(EZString);
 
 impl Role {
@@ -55,6 +55,12 @@ impl Deref for Role {
 
     fn deref(&self) -> &str {
         &self.0
+    }
+}
+
+impl Debug for Role {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Role({:?})", *self.0)
     }
 }
 
