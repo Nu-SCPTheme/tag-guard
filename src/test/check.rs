@@ -15,63 +15,93 @@ use crate::prelude::*;
 fn setup() -> Engine {
     let mut engine = Engine::default();
 
-    engine.add_tag("scp", TemplateTagSpec {
-        conflicting_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("primary")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "scp",
+        TemplateTagSpec {
+            conflicting_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("primary")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("tale", TemplateTagSpec {
-        conflicting_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("primary")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "tale",
+        TemplateTagSpec {
+            conflicting_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("primary")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("hub", TemplateTagSpec {
-        conflicting_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("primary")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "hub",
+        TemplateTagSpec {
+            conflicting_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("primary")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("_image", TemplateTagSpec {
-        conflicting_tags: vec![Tag::new("_cc")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "_image",
+        TemplateTagSpec {
+            conflicting_tags: vec![Tag::new("_cc")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("_cc", TemplateTagSpec {
-        conflicting_tags: vec![Tag::new("_image")],
-        needed_roles: vec![Role::new("licensing")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "_cc",
+        TemplateTagSpec {
+            conflicting_tags: vec![Tag::new("_image")],
+            needed_roles: vec![Role::new("licensing")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("amorphous", TemplateTagSpec {
-        required_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("attribute")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "amorphous",
+        TemplateTagSpec {
+            required_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("attribute")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("humanoid", TemplateTagSpec {
-        required_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("attribute")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "humanoid",
+        TemplateTagSpec {
+            required_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("attribute")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("ontokinetic", TemplateTagSpec {
-        required_tags: vec![Tag::new("primary")],
-        groups: vec![Tag::new("attribute")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "ontokinetic",
+        TemplateTagSpec {
+            required_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("attribute")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("admin", TemplateTagSpec {
-        required_tags: vec![Tag::new("primary")],
-        needed_roles: vec![Role::new("admin")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "admin",
+        TemplateTagSpec {
+            required_tags: vec![Tag::new("primary")],
+            needed_roles: vec![Role::new("admin")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
-    engine.add_tag("past-contest", TemplateTagSpec {
-        needed_roles: vec![Role::new("locked")],
-        ..TemplateTagSpec::default()
-    });
+    engine.add_tag(
+        "past-contest",
+        TemplateTagSpec {
+            needed_roles: vec![Role::new("locked")],
+            ..TemplateTagSpec::default()
+        },
+    );
 
     engine.add_group("primary");
     engine.add_group("attribute");
@@ -89,4 +119,23 @@ fn setup() -> Engine {
 #[test]
 fn test_basic_conflict() {
     let engine = setup();
+
+    macro_rules! check {
+        ($check_tags:expr, $err_tags:expr) => (
+            match engine.check_tags($check_tags).unwrap_err() {
+                Error::RequiresTags(_, tags) => assert_eq!(tags, $err_tags),
+                _ => panic!("Error wasn't RequiresTags"),
+            }
+        )
+    }
+
+    check!(
+        &[Tag::new("ontokinetic"), Tag::new("humanoid")],
+        [Tag::new("primary")]
+    );
+
+    check!(
+        &[Tag::new("scp"), Tag::new("tale")],
+        [Tag::new("primary")]
+    );
 }
