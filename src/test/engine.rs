@@ -20,6 +20,9 @@ fn add_remove_tags() {
     let tag = engine.add_tag("test", TemplateTagSpec::default());
     assert_eq!(engine.has_tag("test"), true);
     assert_eq!(engine.get_tag("test").unwrap(), tag);
+
+    engine.delete_tag(&tag);
+    assert_eq!(engine.has_tag("test"), false);
 }
 
 #[test]
@@ -54,4 +57,14 @@ fn add_remove_specs() {
 
 #[test]
 fn add_remove_groups() {
+    let mut engine = Engine::default();
+
+    assert_eq!(engine.has_tag("fruit"), false);
+    let tag = engine.add_group("fruit");
+    assert_eq!(engine.has_tag("fruit"), true);
+    assert_eq!(engine.get_tag("fruit").unwrap(), tag);
+    assert_eq!(engine.get_spec(&tag).is_err(), true);
+
+    engine.delete_group(&tag);
+    assert_eq!(engine.has_tag("fruit"), false);
 }
