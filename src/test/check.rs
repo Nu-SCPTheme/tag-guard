@@ -155,10 +155,7 @@ fn test_no_tags() {
         "sliver"
     );
 
-    check!(
-        [Tag::new("tale"), Tag::new("_iamge")],
-        "_iamge"
-    )
+    check!([Tag::new("tale"), Tag::new("_iamge")], "_iamge")
 }
 
 #[test]

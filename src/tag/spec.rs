@@ -11,8 +11,7 @@
  */
 
 use crate::{Error, Result};
-use std::collections::HashMap;
-use super::{Role, Tag};
+use crate::prelude::*;
 
 #[derive(Debug, Clone, Default)]
 pub struct TemplateTagSpec {
@@ -67,17 +66,13 @@ impl TagSpec {
     }
 
     #[inline]
-    pub fn check_tags(
-        &self,
-        specs: &HashMap<Tag, TagSpec>,
-        tags: &[Tag],
-    ) -> Result<()> {
-        self.check_tag_changes(specs, &[], &[], tags, &[])
+    pub fn check_tags(&self, engine: &Engine, tags: &[Tag]) -> Result<()> {
+        self.check_tag_changes(engine, &[], &[], tags, &[])
     }
 
     pub fn check_tag_changes(
         &self,
-        specs: &HashMap<Tag, TagSpec>,
+        engine: &Engine,
         added_tags: &[Tag],
         removed_tags: &[Tag],
         tags: &[Tag],
@@ -99,31 +94,23 @@ impl TagSpec {
         }
 
         // Local helper function
-        let has_tag = |tag| {
+        let has_tag = |tag| -> Result<bool> {
+            println!("has_tag: {:?}", tag);
             // Tag isn't present
             if removed_tags.contains(tag) {
-                return false;
+                return Ok(false);
             }
 
-            for (tag2, spec) in specs {
-                // Don't trigger for ourselves
-                if tag == tag2 {
-                    continue;
-                }
+            // Check current and new tags
+            let result = engine.check_tag(tag, tags, &[Tag::clone(tag)])?
+                || engine.check_tag(tag, added_tags, &[Tag::clone(tag)])?;
 
-                // This group matches, as this tag is a member of it
-                if spec.groups.contains(tag) {
-                    return true;
-                }
-            }
-
-            // Is present in the tag list
-            tags.contains(tag) || added_tags.contains(tag)
+            Ok(result)
         };
 
         // Ensure all requirements are met
         for required in &self.required_tags {
-            if !has_tag(required) {
+            if !has_tag(required)? {
                 let required_tags = self.required_tags.clone();
                 return Err(Error::RequiresTags(self.tag(), required_tags));
             }
@@ -131,7 +118,7 @@ impl TagSpec {
 
         // Ensure no conflicts are present
         for conflicts in &self.conflicting_tags {
-            if has_tag(conflicts) {
+            if has_tag(conflicts)? {
                 let conflicts = Tag::clone(conflicts);
                 return Err(Error::IncompatibleTags(self.tag(), conflicts));
             }

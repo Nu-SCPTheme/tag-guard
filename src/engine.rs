@@ -151,15 +151,36 @@ impl Engine {
         }
     }
 
+    /// Determines if the given tag/group is present in the list.
+    pub fn check_tag(&self, some_tag: &Tag, tags: &[Tag], ignore_tags: &[Tag]) -> Result<bool> {
+        if self.is_group(some_tag) {
+            for tag in tags {
+                if ignore_tags.contains(tag) {
+                    continue;
+                }
+
+                if self.get_spec(tag)?.groups.contains(tag) {
+                    return Ok(true);
+                }
+            }
+
+            Ok(false)
+        } else {
+            Ok(tags.contains(some_tag))
+        }
+    }
+
+    /// Validates the given list of tags against the engine's tag policies.
     pub fn check_tags(&self, tags: &[Tag]) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tags(&self.specs, tags)?;
+            spec.check_tags(self, tags)?;
         }
 
         Ok(())
     }
 
+    /// Validates the given list of tag changes against the engine's tag policies.
     pub fn check_tag_changes(
         &self,
         added_tags: &[Tag],
@@ -169,7 +190,7 @@ impl Engine {
     ) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tag_changes(&self.specs, added_tags, removed_tags, tags, roles)?;
+            spec.check_tag_changes(self, added_tags, removed_tags, tags, roles)?;
         }
 
         Ok(())
