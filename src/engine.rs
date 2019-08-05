@@ -23,6 +23,8 @@ pub struct Engine {
 }
 
 impl Engine {
+    /// Registers a tag in the `Engine`, with the given [`TemplateTagSpec`].
+    /// [`TemplateTagSpec`]: ./tag/spec.html
     pub fn add_tag<I: Into<String>>(&mut self, name: I, spec: TemplateTagSpec) -> Tag {
         let tag = Tag::new(name);
         let spec = TagSpec::from_template(&tag, spec);
@@ -32,6 +34,7 @@ impl Engine {
         tag
     }
 
+    /// Unregisters a tag from the `Engine`. Does nothing if already deleted.
     pub fn delete_tag(&mut self, tag: &Tag) {
         self.specs.remove(tag);
         self.tags.remove(tag);
@@ -42,12 +45,14 @@ impl Engine {
         }
     }
 
+    /// Registers a tag group in the `Engine`.
     pub fn add_group<I: Into<String>>(&mut self, name: I) -> Tag {
         let group = Tag::new(name);
         self.tags.insert(Tag::clone(&group));
         group
     }
 
+    /// Unregisters a tag group from the `Engine`. Does nothing if already deleted.
     pub fn delete_group(&mut self, group: &Tag) {
         self.tags.remove(group);
 
@@ -56,12 +61,14 @@ impl Engine {
         }
     }
 
+    /// Registers a role in the `Engine`.
     pub fn add_role<I: Into<String>>(&mut self, name: I) -> Role {
         let role = Role::new(name);
         self.roles.insert(Role::clone(&role));
         role
     }
 
+    /// Unregisters a role from the `Engine`. Does nothing if already deleted.
     pub fn delete_role(&mut self, role: &Role) {
         self.roles.remove(role);
 
@@ -70,12 +77,15 @@ impl Engine {
         }
     }
 
+    /// Gets a [`HashSet`] of all tags and tag groups in the `Engine`.
+    /// [`HashSet`]: https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html
     #[inline]
     pub fn get_tags(&self) -> &HashSet<Tag> {
         &self.tags
     }
 
     /// Gets a read-only set of all registered [`TagSpec`]s.
+    /// This will not include specification data for tag groups, only proper tags.
     /// [`TagSpec`]: ./tag/spec.html
     #[inline]
     pub fn get_specs(&self) -> &HashMap<Tag, TagSpec> {
