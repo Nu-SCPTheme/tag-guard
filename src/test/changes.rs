@@ -45,6 +45,13 @@ fn test_good_changes() {
         &[]
     );
 
+    check!(
+        &[Tag::new("tale"), Tag::new("_image")],
+        &[Tag::new("creepypasta")],
+        &[],
+        &[]
+    );
+
     // Tag removals
     check!(
         &[Tag::new("scp"), Tag::new("esoteric-class"), Tag::new("antimemetic"), Tag::new("electronic")],
@@ -57,6 +64,35 @@ fn test_good_changes() {
         &[Tag::new("tale"), Tag::new("serpents-hand")],
         &[],
         &[Tag::new("serpents-hand")],
+        &[]
+    );
+
+    // Additions and removals
+    check!(
+        &[Tag::new("scp"), Tag::new("keter"), Tag::new("humanoid")],
+        &[Tag::new("euclid")],
+        &[Tag::new("keter")],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("scp"), Tag::new("keter"), Tag::new("humanoid")],
+        &[Tag::new("amorphous")],
+        &[Tag::new("humanoid")],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("hub"), Tag::new("global-occult-coalition")],
+        &[Tag::new("tale")],
+        &[Tag::new("hub")],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("hub"), Tag::new("global-occult-coalition")],
+        &[Tag::new("serpents-hand")],
+        &[Tag::new("global-occult-coalition")],
         &[]
     );
 }
