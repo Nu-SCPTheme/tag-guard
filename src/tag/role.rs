@@ -28,6 +28,11 @@ use std::ops::Deref;
 pub struct Role(EZString);
 
 impl Role {
+    /// Creates a new role.
+    ///
+    /// If you have an existing role and need another owned version, use [`Clone`].
+    ///
+    /// [`Clone`]: https://doc.rust-lang.org/stable/std/clone/trait.Clone.html
     pub fn new<I: Into<String>>(name: I) -> Self {
         let name = name.into();
         assert_ne!(name, "", "Empty role names are not permitted");

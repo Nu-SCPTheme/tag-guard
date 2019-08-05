@@ -28,6 +28,11 @@ use std::ops::Deref;
 pub struct Tag(EZString);
 
 impl Tag {
+    /// Creates a new tag.
+    ///
+    /// If you have an existing tag and need another owned version, use [`Clone`].
+    ///
+    /// [`Clone`]: https://doc.rust-lang.org/stable/std/clone/trait.Clone.html
     pub fn new<I: Into<String>>(name: I) -> Self {
         let name = name.into();
         assert_ne!(name, "", "Empty tag names are not permitted");
