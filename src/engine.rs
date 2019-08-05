@@ -159,7 +159,7 @@ impl Engine {
                     continue;
                 }
 
-                if self.get_spec(tag)?.groups.contains(tag) {
+                if self.get_spec(tag)?.groups.contains(some_tag) {
                     return Ok(true);
                 }
             }
