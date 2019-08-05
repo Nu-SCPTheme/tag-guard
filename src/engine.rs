@@ -151,18 +151,26 @@ impl Engine {
         }
     }
 
-    /// Determines if the given tag/group is present in the list.
-    pub fn check_tag(&self, some_tag: &Tag, tags: &[Tag]) -> Result<bool> {
-        if self.is_group(some_tag) {
-            for tag in tags {
-                if self.get_spec(tag)?.groups.contains(some_tag) {
-                    return Ok(true);
-                }
-            }
+    /// Count the number of tags in the list that are in the given group.
+    /// For tags this will return 0 or 1.
+    pub fn count_tag(&self, check: &Tag, tags: &[Tag]) -> Result<usize> {
+        let mut count = 0;
 
-            Ok(false)
+        for tag in tags {
+            if tag == check || self.get_spec(tag)?.groups.contains(check) {
+                count += 1;
+            }
+        }
+
+        Ok(count)
+    }
+
+    /// Determines if the given tag/group is present in the list.
+    pub fn check_tag(&self, check: &Tag, tags: &[Tag]) -> Result<bool> {
+        if self.is_group(check) {
+            self.count_tag(check, tags).map(|count| count > 0)
         } else {
-            Ok(tags.contains(some_tag))
+            Ok(tags.contains(check))
         }
     }
 
