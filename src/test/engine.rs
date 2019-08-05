@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use crate::prelude::*;
+use super::prelude::*;
 
 #[test]
 fn add_remove_tags() {

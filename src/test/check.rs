@@ -10,111 +10,7 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use crate::prelude::*;
-
-fn setup() -> Engine {
-    let mut engine = Engine::default();
-
-    engine.add_tag(
-        "scp",
-        TemplateTagSpec {
-            conflicting_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("primary")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "tale",
-        TemplateTagSpec {
-            conflicting_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("primary")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "hub",
-        TemplateTagSpec {
-            conflicting_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("primary")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "_image",
-        TemplateTagSpec {
-            conflicting_tags: vec![Tag::new("_cc")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "_cc",
-        TemplateTagSpec {
-            conflicting_tags: vec![Tag::new("_image")],
-            needed_roles: vec![Role::new("licensing")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "amorphous",
-        TemplateTagSpec {
-            required_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("attribute")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "humanoid",
-        TemplateTagSpec {
-            required_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("attribute")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "ontokinetic",
-        TemplateTagSpec {
-            required_tags: vec![Tag::new("primary")],
-            groups: vec![Tag::new("attribute")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "admin",
-        TemplateTagSpec {
-            required_tags: vec![Tag::new("primary")],
-            needed_roles: vec![Role::new("admin")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_tag(
-        "past-contest",
-        TemplateTagSpec {
-            needed_roles: vec![Role::new("locked")],
-            ..TemplateTagSpec::default()
-        },
-    );
-
-    engine.add_group("primary");
-    engine.add_group("attribute");
-    engine.add_group("licensing");
-
-    engine.add_role("admin");
-    engine.add_role("moderator");
-    engine.add_role("licensing");
-    engine.add_role("member");
-    engine.add_role("locked");
-
-    engine
-}
+use super::prelude::*;
 
 #[test]
 fn test_good_tags() {
@@ -130,11 +26,11 @@ fn test_good_tags() {
         Tag::new("scp"),
         Tag::new("ontokinetic"),
         Tag::new("humanoid"),
-        Tag::new("past-contest")
+        Tag::new("doomsday2018")
     ]);
     check!([Tag::new("scp"), Tag::new("amourphous"), Tag::new("_image")]);
     check!([Tag::new("tale"), Tag::new("_cc")]);
-    check!([Tag::new("hub"), Tag::new("past-contest")])
+    check!([Tag::new("hub"), Tag::new("doomsday2018")])
 }
 
 #[test]
@@ -155,7 +51,10 @@ fn test_no_tags() {
         "sliver"
     );
 
-    check!([Tag::new("tale"), Tag::new("_iamge")], "_iamge")
+    check!(
+        [Tag::new("tale"), Tag::new("_iamge")],
+        "_iamge"
+    )
 }
 
 #[test]
