@@ -46,9 +46,19 @@ pub use self::error::Error;
 pub use self::load::Configuration;
 pub use self::tag::{Role, Tag, TagSpec, TemplateTagSpec};
 
+/// An alias for the [`Result`] type found in the standard library.
+///
+/// [`Result`]: https://doc.rust-lang.org/stable/std/result/enum.Result.html
 pub type StdResult<T, E> = std::result::Result<T, E>;
+
+/// A [`Result`] type with the [`Error`] used by this crate.
+///
+/// [`Error`]: ./enum.Error.html
+/// [`Result`]: https://doc.rust-lang.org/stable/std/result/enum.Result.html
 pub type Result<T> = StdResult<T, Error>;
 
 pub mod prelude {
+    //! A "prelude" module, intended to be star-imported: `use tag_guard::prelude::*;`
+
     pub use super::{Engine, Error, Role, Tag, TagSpec, TemplateTagSpec};
 }
