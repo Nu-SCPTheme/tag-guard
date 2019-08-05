@@ -16,7 +16,7 @@ use super::{Role, Tag};
 
 /// An enum to represent various tagging errors.
 #[must_use = "should handle errors"]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Error {
     /// The tag cannot be applied unless the others are also present.
     RequiresTags(Tag, Vec<Tag>),

@@ -19,7 +19,7 @@ fn test_good_changes() {
     macro_rules! check {
         ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => (
             let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
-            assert_eq!(result.is_ok(), true, "Expected Ok, got {:#?}", result);
+            assert_eq!(result, Ok(()));
         )
     }
 
@@ -94,5 +94,67 @@ fn test_good_changes() {
         &[Tag::new("serpents-hand")],
         &[Tag::new("global-occult-coalition")],
         &[]
+    );
+
+    check!(
+        &[Tag::new("tale"), Tag::new("_image")],
+        &[Tag::new("_cc")],
+        &[Tag::new("_image")],
+        &[]
+    );
+}
+
+#[test]
+fn test_bad_changes() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => (
+            let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
+            assert_eq!(result, Err($error));
+        )
+    }
+
+    // Incompatible tags
+    check!(
+        &[Tag::new("scp"), Tag::new("euclid"), Tag::new("humanoid")],
+        &[Tag::new("tale")],
+        &[],
+        &[],
+        Error::IncompatibleTags(Tag::new("scp"), Tag::new("primary"))
+    );
+
+    check!(
+        &[Tag::new("tale"), Tag::new("_image")],
+        &[Tag::new("_cc")],
+        &[],
+        &[],
+        Error::IncompatibleTags(Tag::new("_image"), Tag::new("_cc"))
+    );
+
+    // Requires tags
+    check!(
+        &[Tag::new("scp"), Tag::new("electronic")],
+        &[],
+        &[Tag::new("scp")],
+        &[],
+        Error::RequiresTags(Tag::new("electronic"), vec![Tag::new("primary")])
+    );
+
+    // Missing roles
+    check!(
+        &[Tag::new("scp")],
+        &[Tag::new("doomsday2018")],
+        &[],
+        &[Role::new("member")],
+        Error::MissingRoles(vec![Role::new("locked")])
+    );
+
+    check!(
+        &[],
+        &[Tag::new("admin"), Tag::new("hub")],
+        &[],
+        &[Role::new("member")],
+        Error::MissingRoles(vec![Role::new("admin")])
     );
 }
