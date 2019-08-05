@@ -33,7 +33,7 @@ pub struct Engine {
 impl Engine {
     /// Registers a tag in the `Engine`, with the given [`TemplateTagSpec`].
     ///
-    /// [`TemplateTagSpec`]: ./tag/spec.html
+    /// [`TemplateTagSpec`]: ./struct.TemplateTagSpec.html
     pub fn add_tag<I: Into<String>>(&mut self, name: I, spec: TemplateTagSpec) -> Tag {
         let tag = Tag::new(name);
         let spec = TagSpec::from_template(&tag, spec);

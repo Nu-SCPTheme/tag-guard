@@ -15,6 +15,15 @@ use std::borrow::Borrow;
 use std::fmt::{self, Debug, Display};
 use std::ops::Deref;
 
+/// An owned reference to a role.
+///
+/// Essentially an immutable wrapper over a [`String`], which allows cheap cloning
+/// to avoid reallocating buffers. Used to represent a particular, case-sensitive role.
+///
+/// See also [`Tag`].
+///
+/// [`String`]: https://doc.rust-lang.org/stable/std/string/struct.String.html
+/// [`Tag`]: ./struct.Tag.html
 #[derive(Clone, Hash, PartialEq, Eq)]
 pub struct Role(EZString);
 
