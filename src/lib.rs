@@ -11,6 +11,7 @@
  */
 
 #![deny(missing_debug_implementations)]
+#![warn(missing_docs)]
 
 //! A library to enforce user-specified tag relationships.
 //!
