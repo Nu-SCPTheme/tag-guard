@@ -171,16 +171,6 @@ impl TagSpec {
         removed_tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
-        // Check for tags that are both added and removed
-        for tag in added_tags {
-println!("added_tags: {:?}, removed_tags: {:?}", added_tags, removed_tags);
-            if removed_tags.contains(tag) {
-                return Err(Error::Other(
-                    "Tag present in both added_tags and removed_tags",
-                ));
-            }
-        }
-
         // Check if this tag was changed
         if added_tags.contains(&self.tag) || removed_tags.contains(&self.tag) {
             // If so, ensure user has permission to change this tag

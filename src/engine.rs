@@ -221,12 +221,23 @@ impl Engine {
         removed_tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
+        // Check for unregistered roles
         for role in roles {
             if !self.roles.contains(role) {
                 let role = Role::clone(role);
                 return Err(Error::MissingRole(role));
             }
         }
+
+        // Check for tags that are both added and removed
+        for tag in added_tags {
+            if removed_tags.contains(tag) {
+                return Err(Error::Other(
+                    "Tag present in both added_tags and removed_tags",
+                ));
+            }
+        }
+
 
         for tag in tags {
             let spec = self.get_spec(&tag)?;
