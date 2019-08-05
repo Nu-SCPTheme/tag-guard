@@ -10,8 +10,7 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-#![deny(missing_debug_implementations)]
-#![warn(missing_docs)]
+#![deny(missing_debug_implementations, missing_docs)]
 
 //! A library to enforce user-specified tag relationships.
 //!
