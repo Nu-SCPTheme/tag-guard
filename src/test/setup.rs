@@ -126,6 +126,15 @@ pub fn setup() -> Engine {
     );
 
     engine.add_tag(
+        "antimemetic",
+        TemplateTagSpec {
+            required_tags: vec![Tag::new("primary")],
+            groups: vec![Tag::new("attribute")],
+            ..TemplateTagSpec::default()
+        },
+    );
+
+    engine.add_tag(
         "electronic",
         TemplateTagSpec {
             required_tags: vec![Tag::new("primary")],
@@ -150,6 +159,30 @@ pub fn setup() -> Engine {
             groups: vec![Tag::new("attribute")],
             ..TemplateTagSpec::default()
         },
+    );
+
+    engine.add_tag(
+        "global-occult-coalition",
+        TemplateTagSpec {
+            groups: vec![Tag::new("goi")],
+            ..TemplateTagSpec::default()
+        }
+    );
+
+    engine.add_tag(
+        "marshall-carter-and-dark",
+        TemplateTagSpec {
+            groups: vec![Tag::new("goi")],
+            ..TemplateTagSpec::default()
+        }
+    );
+
+    engine.add_tag(
+        "serpents-hand",
+        TemplateTagSpec {
+            groups: vec![Tag::new("goi")],
+            ..TemplateTagSpec::default()
+        }
     );
 
     engine.add_tag("co-authored", TemplateTagSpec::default());

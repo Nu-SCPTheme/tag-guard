@@ -10,4 +10,53 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-// TODO
+use super::prelude::*;
+
+#[test]
+fn test_good_changes() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => (
+            let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
+            assert_eq!(result.is_ok(), true, "Expected Ok, got {:#?}", result);
+        )
+    }
+
+    // Tag additions
+    check!(
+        &[Tag::new("scp"), Tag::new("euclid"), Tag::new("humanoid")],
+        &[Tag::new("ontokinetic")],
+        &[],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("scp"), Tag::new("amorphous"), Tag::new("electronic")],
+        &[Tag::new("safe")],
+        &[],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("tale"), Tag::new("marshall-carter-and-dark")],
+        &[Tag::new("serpents-hand")],
+        &[],
+        &[]
+    );
+
+    // Tag removals
+    check!(
+        &[Tag::new("scp"), Tag::new("esoteric-class"), Tag::new("antimemetic"), Tag::new("electronic")],
+        &[],
+        &[Tag::new("electronic")],
+        &[]
+    );
+
+    check!(
+        &[Tag::new("tale"), Tag::new("serpents-hand")],
+        &[],
+        &[Tag::new("serpents-hand")],
+        &[]
+    );
+}
