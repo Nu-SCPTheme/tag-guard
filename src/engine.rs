@@ -152,13 +152,9 @@ impl Engine {
     }
 
     /// Determines if the given tag/group is present in the list.
-    pub fn check_tag(&self, some_tag: &Tag, tags: &[Tag], ignore_tags: &[Tag]) -> Result<bool> {
+    pub fn check_tag(&self, some_tag: &Tag, tags: &[Tag]) -> Result<bool> {
         if self.is_group(some_tag) {
             for tag in tags {
-                if ignore_tags.contains(tag) {
-                    continue;
-                }
-
                 if self.get_spec(tag)?.groups.contains(some_tag) {
                     return Ok(true);
                 }

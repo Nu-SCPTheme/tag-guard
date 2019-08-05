@@ -19,7 +19,7 @@ fn test_has_tags() {
     macro_rules! check {
         ($tags:expr, $tag:expr, $result:expr) => (
             let tag = Tag::new($tag);
-            let result = engine.check_tag(&tag, &$tags, &[]).unwrap();
+            let result = engine.check_tag(&tag, &$tags).unwrap();
             assert_eq!(
                 result,
                 $result,
