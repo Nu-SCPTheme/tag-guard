@@ -94,21 +94,20 @@ impl TagSpec {
         }
 
         // Local helper function
-        let has_tag = |tag| -> Result<bool> {
-            println!("has_tag: {:?}", tag);
+        let count_tags = |tag| -> Result<usize> {
             // Tag isn't present
             if removed_tags.contains(tag) {
-                return Ok(false);
+                return Ok(0);
             }
 
             // Check current and new tags
-            let result = engine.check_tag(tag, tags)? || engine.check_tag(tag, added_tags)?;
+            let result = engine.count_tag(tag, tags)? + engine.count_tag(tag, added_tags)?;
             Ok(result)
         };
 
         // Ensure all requirements are met
         for required in &self.required_tags {
-            if !has_tag(required)? {
+            if count_tags(required)? == 0 {
                 let required_tags = self.required_tags.clone();
                 return Err(Error::RequiresTags(self.tag(), required_tags));
             }
@@ -116,7 +115,9 @@ impl TagSpec {
 
         // Ensure no conflicts are present
         for conflicts in &self.conflicting_tags {
-            if has_tag(conflicts)? {
+            let self_matches = engine.check_tag(&self.tag, tags)? || engine.check_tag(&self.tag, added_tags)?;
+
+            if count_tags(conflicts)? <= usize::from(self_matches) {
                 let conflicts = Tag::clone(conflicts);
                 return Err(Error::IncompatibleTags(self.tag(), conflicts));
             }
