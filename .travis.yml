@@ -19,6 +19,7 @@ cache: cargo
 
 script:
   - cargo build --verbose
+  - cargo doc --verbose
   - cargo test --verbose -- --nocapture
 
 notifications:
