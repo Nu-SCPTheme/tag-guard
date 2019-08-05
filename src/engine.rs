@@ -15,6 +15,14 @@ use crate::prelude::*;
 use std::borrow::Borrow;
 use std::collections::{HashMap, HashSet};
 
+/// A representation of a complete configuration of tags, groups, and roles.
+///
+/// Contains methods to determine if a tagset is valid given the rules in this
+/// `Engine` or getting other configured information.
+/// Also provides means of modifying the `Engine`'s internal state.
+///
+/// The consumer is responsible for ensuring that referenced tags, groups, and
+/// roles are registered before being used.
 #[derive(Debug, Default)]
 pub struct Engine {
     specs: HashMap<Tag, TagSpec>,
