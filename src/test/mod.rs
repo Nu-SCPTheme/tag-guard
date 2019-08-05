@@ -158,6 +158,8 @@ mod prelude {
             },
         );
 
+        engine.add_tag("co-authored", TemplateTagSpec::default());
+
         engine.add_tag(
             "admin",
             TemplateTagSpec {
@@ -171,6 +173,7 @@ mod prelude {
             "doomsday2018",
             TemplateTagSpec {
                 needed_roles: vec![Role::new("locked")],
+                groups: vec![Tag::new("contests")],
                 ..TemplateTagSpec::default()
             },
         );
@@ -179,6 +182,7 @@ mod prelude {
             "cliche2019",
             TemplateTagSpec {
                 needed_roles: vec![Role::new("locked")],
+                groups: vec![Tag::new("contests")],
                 ..TemplateTagSpec::default()
             },
         );

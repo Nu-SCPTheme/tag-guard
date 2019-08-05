@@ -31,7 +31,12 @@ fn test_has_tags() {
         )
     }
 
-    let tags = [Tag::new("scp"), Tag::new("euclid"), Tag::new("ontokinetic"), Tag::new("humanoid")];
+    let tags = [
+        Tag::new("scp"),
+        Tag::new("euclid"),
+        Tag::new("ontokinetic"),
+        Tag::new("humanoid"),
+    ];
 
     // Check tags exist
     check!(tags, "scp", true);
@@ -48,4 +53,42 @@ fn test_has_tags() {
     check!(tags, "attribute", true);
 
     check!(tags, "licensing", false);
+}
+
+#[test]
+fn test_count_tags() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($tags:expr, $tag:expr, $count:expr) => (
+            let tag = Tag::new($tag);
+            let count = engine.count_tag(&tag, &$tags).unwrap();
+            assert_eq!(count, $count);
+        )
+    }
+
+    let tags = [
+        Tag::new("scp"),
+        Tag::new("tale"),
+        Tag::new("_image"),
+        Tag::new("_cc"),
+        Tag::new("amorphous"),
+        Tag::new("electronic"),
+        Tag::new("ontokinetic"),
+        Tag::new("humanoid"),
+    ];
+
+    // Check tag counts
+    check!(tags, "scp", 1);
+    check!(tags, "tale", 1);
+    check!(tags, "humanoid", 1);
+    check!(tags, "co-authored", 0);
+    check!(tags, "admin", 0);
+    check!(tags, "cliche2019", 0);
+
+    // Check group counts
+    check!(tags, "primary", 2);
+    check!(tags, "licensing", 2);
+    check!(tags, "attribute", 4);
+    check!(tags, "contests", 0);
 }

@@ -28,7 +28,7 @@ fn test_good_tags() {
         Tag::new("humanoid"),
         Tag::new("doomsday2018")
     ]);
-    check!([Tag::new("scp"), Tag::new("amourphous"), Tag::new("_image")]);
+    check!([Tag::new("scp"), Tag::new("amorphous"), Tag::new("_image")]);
     check!([Tag::new("tale"), Tag::new("_cc")]);
     check!([Tag::new("hub"), Tag::new("doomsday2018")])
 }
@@ -51,14 +51,11 @@ fn test_no_tags() {
         "sliver"
     );
 
-    check!(
-        [Tag::new("tale"), Tag::new("_iamge")],
-        "_iamge"
-    )
+    check!([Tag::new("tale"), Tag::new("_iamge")], "_iamge")
 }
 
 #[test]
-fn test_conflicts() {
+fn test_requires() {
     let engine = setup();
 
     macro_rules! check {
@@ -75,7 +72,36 @@ fn test_conflicts() {
         [Tag::new("primary")]
     );
 
-    check!([Tag::new("scp"), Tag::new("tale")], [Tag::new("primary")]);
+    check!(
+        [Tag::new("creepypasta"), Tag::new("co-authored")],
+        [Tag::new("tale")]
+    );
+}
 
-    check!([Tag::new("_image"), Tag::new("_cc")], [Tag::new("_cc")]);
+#[test]
+fn test_conflicts() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($check_tags:expr, $first_err_tag:expr, $second_err_tag:expr) => (
+            match engine.check_tags(&$check_tags).unwrap_err() {
+                Error::IncompatibleTags(first_tag, second_tag) => {
+                    assert_eq!(first_tag, $first_err_tag);
+                    assert_eq!(second_tag, $second_err_tag);
+                },
+                error => panic!("Error wasn't IncompatibleTags: {:?}", error),
+            }
+        )
+    }
+
+    check!(
+        [Tag::new("scp"), Tag::new("tale")],
+        Tag::new("scp"),
+        Tag::new("primary")
+    );
+    check!(
+        [Tag::new("cliche2019"), Tag::new("_image"), Tag::new("_cc")],
+        Tag::new("_image"),
+        Tag::new("_cc")
+    );
 }

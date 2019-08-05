@@ -115,9 +115,12 @@ impl TagSpec {
 
         // Ensure no conflicts are present
         for conflicts in &self.conflicting_tags {
-            let self_matches = engine.check_tag(&self.tag, tags)? || engine.check_tag(&self.tag, added_tags)?;
+            // Sees if the current tag matches the conflict requirement,
+            // to avoid getting a false-positive on ourselves.
+            let self_matches =
+                engine.check_tag(&self.tag, tags)? || engine.check_tag(&self.tag, added_tags)?;
 
-            if count_tags(conflicts)? <= usize::from(self_matches) {
+            if count_tags(conflicts)? > usize::from(self_matches) {
                 let conflicts = Tag::clone(conflicts);
                 return Err(Error::IncompatibleTags(self.tag(), conflicts));
             }
