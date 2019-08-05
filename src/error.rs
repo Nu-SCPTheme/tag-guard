@@ -32,6 +32,11 @@ pub enum Error {
     /// The given tag name could not be found.
     NoSuchTag(String),
 
+    /// The given role is not registered in the [`Engine`].
+    ///
+    /// [`Engine`]: ./struct.Engine.html
+    MissingRole(Role),
+
     /// Unable to perform this operation due to lacking necessary access role.
     MissingRoles(Vec<Role>),
 
@@ -54,6 +59,7 @@ impl StdError for Error {
             IncompatibleTags(_, _) => "Tags conflict",
             MissingTag(_) => "Tag not found in Engine",
             NoSuchTag(_) => "No tag with that name",
+            MissingRole(_) => "Role not found in Engine",
             MissingRoles(_) => "Cannot apply tags without roles",
             NoSuchRole(_) => "No role with that name",
             Other(msg) => msg,
@@ -84,6 +90,7 @@ impl Display for Error {
             }
             IncompatibleTags(ref first, ref second) => write!(f, "{} and {}", first, second),
             MissingTag(ref tag) => write!(f, "{}", tag),
+            MissingRole(ref role) => write!(f, "{}", role),
             NoSuchTag(ref name) => write!(f, "{}", name),
             NoSuchRole(ref name) => write!(f, "{}", name),
             Other(_) => Ok(()),

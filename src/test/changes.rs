@@ -158,3 +158,55 @@ fn test_bad_changes() {
         Error::MissingRoles(vec![Role::new("admin")])
     );
 }
+
+#[test]
+fn test_invalid_tags() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => (
+            let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
+            assert_eq!(result, Err($error));
+        )
+    }
+
+    // No tag registered
+    check!(
+        &[Tag::new("scp"), Tag::new("keter"), Tag::new("keter")],
+        &[Tag::new("badass")],
+        &[],
+        &[Role::new("member")],
+        Error::MissingTag(Tag::new(str!("badass")))
+    );
+
+    // No such role
+    check!(
+        &[Tag::new("tale")],
+        &[Tag::new("_image")],
+        &[],
+        &[Role::new("invalid-role")],
+        Error::MissingRole(Role::new("invalid-role"))
+    );
+}
+
+#[test]
+fn test_misc() {
+    let engine = setup();
+
+    macro_rules! check {
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => (
+            let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
+            match result {
+                Err(Error::Other(_)) => (),
+                _ => panic!("Expected Error::Other, got {:#?}", result),
+            }
+        )
+    }
+
+    check!(
+        &[],
+        &[Tag::new("tale")],
+        &[Tag::new("tale")],
+        &[]
+    );
+}

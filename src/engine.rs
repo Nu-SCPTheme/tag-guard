@@ -221,6 +221,13 @@ impl Engine {
         removed_tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
+        for role in roles {
+            if !self.roles.contains(role) {
+                let role = Role::clone(role);
+                return Err(Error::MissingRole(role));
+            }
+        }
+
         for tag in tags {
             let spec = self.get_spec(&tag)?;
             spec.check_tag_changes(self, tags, added_tags, removed_tags, roles)?;

@@ -173,6 +173,7 @@ impl TagSpec {
     ) -> Result<()> {
         // Check for tags that are both added and removed
         for tag in added_tags {
+println!("added_tags: {:?}, removed_tags: {:?}", added_tags, removed_tags);
             if removed_tags.contains(tag) {
                 return Err(Error::Other(
                     "Tag present in both added_tags and removed_tags",
