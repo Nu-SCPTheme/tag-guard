@@ -10,18 +10,42 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
+//! A module for easily serializing/deserializing [`Engine`] configurations.
+//!
+//! Will automatically handle registration of new tags, groups, and roles as
+//! they are encountered through the specification. See the repository's
+//! `misc/config.toml` file to get an example of how these configurations should
+//! be structured.
+//!
+//! [`Engine`]: ./struct.Engine.html
+
 use crate::Result;
 use crate::prelude::*;
 use std::collections::HashSet;
 use std::mem;
 
+/// A serializeable struct that can be applied to an [`Engine`].
+///
+/// [`Engine`]: ./struct.Engine.html
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Configuration {
-    roles: Vec<String>,
-    tags: Vec<TagConfig>,
+    /// A declaration of all [`Role`]s.
+    ///
+    /// [`Role`]: ./struct.Role.html
+    pub roles: Vec<String>,
+
+    /// All tags, and their respective configuration.
+    ///
+    /// See also [`TemplateTagSpec`].
+    ///
+    /// [`TemplateTagSpec`]: ./struct.TemplateTagSpec.html
+    pub tags: Vec<TagConfig>,
 }
 
 impl Configuration {
+    /// Parses all of the fields in the config and applies them to the [`Engine`].
+    ///
+    /// [`Engine`]: ./struct.Engine.html
     pub fn apply(self, engine: &mut Engine) {
         let Configuration { roles, tags } = self;
 
@@ -155,11 +179,34 @@ impl Configuration {
     }
 }
 
+/// Serializeable sub-structure used as part of [`Configuration`].
+///
+/// [`Configuration`]: ./struct.Configuration.html
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-struct TagConfig {
-    name: String,
-    groups: Option<Vec<String>>,
-    roles: Option<Vec<String>>,
-    requires: Option<Vec<String>>,
-    conflicts_with: Option<Vec<String>>,
+pub struct TagConfig {
+    /// The name of the [`Tag`].
+    ///
+    /// [`Tag`]: ./struct.Tag.html
+    pub name: String,
+
+    /// All groups of which this [`Tag`] is a member.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
+    pub groups: Option<Vec<String>>,
+
+    /// Any [`Role`]s needed to apply or remove this [`Tag`].
+    ///
+    /// [`Role`]: ./struct.Role.html
+    /// [`Tag`]: ./struct.Tag.html
+    pub roles: Option<Vec<String>>,
+
+    /// Which other [`Tag`]s or tag groups this tag requires.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
+    pub requires: Option<Vec<String>>,
+
+    /// Which other [`Tag`]s or tag groups this tag conflicts with.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
+    pub conflicts_with: Option<Vec<String>>,
 }

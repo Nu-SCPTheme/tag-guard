@@ -31,19 +31,18 @@ extern crate serde;
 
 #[macro_use]
 extern crate str_macro;
-extern crate toml;
 
 mod engine;
 mod error;
-mod load;
 mod tag;
 
 #[cfg(test)]
 mod test;
 
+pub mod load;
+
 pub use self::engine::Engine;
 pub use self::error::Error;
-pub use self::load::Configuration;
 pub use self::tag::{Role, Tag, TagSpec, TemplateTagSpec};
 
 /// An alias for the [`Result`] type found in the standard library.
