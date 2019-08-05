@@ -14,6 +14,7 @@ use std::error::Error as StdError;
 use std::fmt::{self, Display};
 use super::{Role, Tag};
 
+/// An enum to represent various tagging errors.
 #[must_use = "should handle errors"]
 #[derive(Debug)]
 pub enum Error {
@@ -37,6 +38,9 @@ pub enum Error {
     NoSuchRole(String),
 
     /// For uncommon error cases.
+    /// These should not occur assuming a properly-configured [`Engine`].
+    ///
+    /// [`Engine`]: ./engine.html
     Other(&'static str),
 }
 
