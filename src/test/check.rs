@@ -95,7 +95,7 @@ fn test_conflicts() {
     }
 
     check!(
-        [Tag::new("scp"), Tag::new("tale")],
+        [Tag::new("scp"), Tag::new("tale"), Tag::new("keter")],
         Tag::new("scp"),
         Tag::new("primary")
     );
@@ -103,5 +103,10 @@ fn test_conflicts() {
         [Tag::new("cliche2019"), Tag::new("_image"), Tag::new("_cc")],
         Tag::new("_image"),
         Tag::new("_cc")
+    );
+    check!(
+        [Tag::new("cliche2019"), Tag::new("doomsday2018")],
+        Tag::new("cliche2019"),
+        Tag::new("contests")
     );
 }

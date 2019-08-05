@@ -172,6 +172,7 @@ mod prelude {
         engine.add_tag(
             "doomsday2018",
             TemplateTagSpec {
+                conflicting_tags: vec![Tag::new("contests")],
                 needed_roles: vec![Role::new("locked")],
                 groups: vec![Tag::new("contests")],
                 ..TemplateTagSpec::default()
@@ -181,15 +182,17 @@ mod prelude {
         engine.add_tag(
             "cliche2019",
             TemplateTagSpec {
+                conflicting_tags: vec![Tag::new("contests")],
                 needed_roles: vec![Role::new("locked")],
                 groups: vec![Tag::new("contests")],
                 ..TemplateTagSpec::default()
             },
         );
 
-        engine.add_group("primary");
         engine.add_group("attribute");
+        engine.add_group("contests");
         engine.add_group("licensing");
+        engine.add_group("primary");
 
         engine.add_role("admin");
         engine.add_role("moderator");

@@ -64,6 +64,7 @@ fn add_remove_groups() {
     assert_eq!(engine.has_tag("fruit"), true);
     assert_eq!(engine.get_tag("fruit").unwrap(), tag);
     assert_eq!(engine.get_spec(&tag).is_err(), true);
+    assert_eq!(engine.is_group(&tag), true);
 
     engine.delete_group(&tag);
     assert_eq!(engine.has_tag("fruit"), false);
