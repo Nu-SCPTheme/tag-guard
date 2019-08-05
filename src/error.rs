@@ -25,7 +25,8 @@ pub enum Error {
     IncompatibleTags(Tag, Tag),
 
     /// The given tag is not registered in the [`Engine`].
-    /// [`Engine`]: ./engine.html
+    ///
+    /// [`Engine`]: ./struct.Engine.html
     MissingTag(Tag),
 
     /// The given tag name could not be found.
@@ -40,7 +41,7 @@ pub enum Error {
     /// For uncommon error cases.
     /// These should not occur assuming a properly-configured [`Engine`].
     ///
-    /// [`Engine`]: ./engine.html
+    /// [`Engine`]: ./struct.Engine.html
     Other(&'static str),
 }
 

@@ -13,20 +13,86 @@
 use crate::{Error, Result};
 use crate::prelude::*;
 
+/// Input specification of a tag's requirements.
+///
+/// Consumed by an [`Engine`] to produce a [`TagSpec`] for use.
+///
+/// [`Engine`]: ./struct.Engine.html
+/// [`TagSpec`]: ./struct.TagSpec.html
 #[derive(Debug, Clone, Default)]
 pub struct TemplateTagSpec {
+    /// Which [`Tag`]s or tag groups must also be present for before this one may be applied.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
     pub required_tags: Vec<Tag>,
+
+    /// Which [`Tag`]s or tag groups may not be present if this one is to be applied.
+    ///
+    /// Note that specifying a tag group that this tag is a member of is not contradictory,
+    /// as the [`Engine`] will instead ensure this tag is the only one of its group present.
+    ///
+    /// [`Engine`]: ./struct.Engine.html
+    /// [`Tag`]: ./struct.Tag.html
     pub conflicting_tags: Vec<Tag>,
+
+    /// A list of [`Role`]s which may add or remove this tag.
+    ///
+    /// To "lock" a tag, you can set this to either moderator-only, or create a specific role that
+    /// nobody has access to.
+    ///
+    /// [`Role`]: ./struct.Role.html
     pub needed_roles: Vec<Role>,
+
+    /// A list of [`Tag`] groups this tag is a member of.
+    ///
+    /// If a tag group is checked for membership, then the presence of this tag will cause it to
+    /// return `true`. Likewise, tag groups can be used for requirements or conflicts in other
+    /// tag rules.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
     pub groups: Vec<Tag>,
 }
 
+/// A [`TemplateTagSpec`] that has been associated with a particular [`Tag`].
+///
+/// Stored in an [`Engine`] to determine behavior with other tags.
+///
+/// [`Engine`]: ./struct.Engine.html
+/// [`Tag`]: ./struct.Tag.html
+/// [`TemplateTagSpec`]: ./struct.TemplateTagSpec.html
 #[derive(Debug)]
 pub struct TagSpec {
     tag: Tag,
+
+    /// Which [`Tag`]s or tag groups must also be present for before this one may be applied.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
     pub required_tags: Vec<Tag>,
+
+    /// Which [`Tag`]s or tag groups may not be present if this one is to be applied.
+    ///
+    /// Note that specifying a tag group that this tag is a member of is not contradictory,
+    /// as the [`Engine`] will instead ensure this tag is the only one of its group present.
+    ///
+    /// [`Engine`]: ./struct.Engine.html
+    /// [`Tag`]: ./struct.Tag.html
     pub conflicting_tags: Vec<Tag>,
+
+    /// A list of [`Role`]s which may add or remove this tag.
+    ///
+    /// To "lock" a tag, you can set this to either moderator-only, or create a specific role that
+    /// nobody has access to.
+    ///
+    /// [`Role`]: ./struct.Role.html
     pub needed_roles: Vec<Role>,
+
+    /// A list of [`Tag`] groups this tag is a member of.
+    ///
+    /// If a tag group is checked for membership, then the presence of this tag will cause it to
+    /// return `true`. Likewise, tag groups can be used for requirements or conflicts in other
+    /// tag rules.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
     pub groups: Vec<Tag>,
 }
 
