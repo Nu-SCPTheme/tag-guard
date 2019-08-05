@@ -97,11 +97,18 @@ pub struct TagSpec {
 }
 
 impl TagSpec {
+    /// Returns the [`Tag`] associated with this specification.
+    ///
+    /// [`Tag`]: ./struct.Tag.html
     #[inline]
     pub fn tag(&self) -> Tag {
         Tag::clone(&self.tag)
     }
 
+    /// Creates a new instance using the given [`Tag`] and [`TemplateTagSpec`].
+    ///
+    /// [`Tag`]: ./struct.Tag.html
+    /// [`TemplateTagSpec`]: ./struct.TemplateTagSpec.html
     #[inline]
     pub fn from_template(tag: &Tag, spec: TemplateTagSpec) -> Self {
         let tag = Tag::clone(tag);
@@ -131,11 +138,25 @@ impl TagSpec {
         Err(Error::MissingRoles(self.needed_roles.clone()))
     }
 
+    /// Checks that the given [`Tag`]s comply with the policy described in the [`Engine`].
+    ///
+    /// [`Engine`]: ./struct.Engine.html
+    /// [`Tag`]: ./struct.Tag.html
     #[inline]
     pub fn check_tags(&self, engine: &Engine, tags: &[Tag]) -> Result<()> {
         self.check_tag_changes(engine, &[], &[], tags, &[])
     }
 
+    /// Checks that the given [`Tag`]s changes with the policy described in the [`Engine`].
+    ///
+    /// Will consider the action of adding `added_tags` and removing `removed_tags` from the
+    /// list of tags passed in as `tags`. The user performing the action has the roles specified
+    /// in `roles`, and their ability to add or remove the new tags will be checked against that.
+    ///
+    /// `added_tags` and `removed_tags` should not have any members in common.
+    ///
+    /// [`Engine`]: ./struct.Engine.html
+    /// [`Tag`]: ./struct.Tag.html
     pub fn check_tag_changes(
         &self,
         engine: &Engine,
