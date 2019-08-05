@@ -129,6 +129,12 @@ impl TagSpec {
     }
 
     fn check_roles(&self, roles: &[Role]) -> Result<()> {
+        // No role requirements
+        if self.needed_roles.is_empty() {
+            return Ok(());
+        }
+
+        // Ensure at least one role matches
         for role in roles {
             if self.needed_roles.contains(role) {
                 return Ok(());
