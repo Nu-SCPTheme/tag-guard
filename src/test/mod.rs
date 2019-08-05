@@ -18,5 +18,5 @@ mod setup;
 
 mod prelude {
     pub use crate::prelude::*;
-    pub use self::setup::setup;
+    pub use super::setup::setup;
 }
