@@ -24,6 +24,7 @@ pub struct Engine {
 
 impl Engine {
     /// Registers a tag in the `Engine`, with the given [`TemplateTagSpec`].
+    ///
     /// [`TemplateTagSpec`]: ./tag/spec.html
     pub fn add_tag<I: Into<String>>(&mut self, name: I, spec: TemplateTagSpec) -> Tag {
         let tag = Tag::new(name);
@@ -78,6 +79,7 @@ impl Engine {
     }
 
     /// Gets a [`HashSet`] of all tags and tag groups in the `Engine`.
+    ///
     /// [`HashSet`]: https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html
     #[inline]
     pub fn get_tags(&self) -> &HashSet<Tag> {
@@ -86,6 +88,7 @@ impl Engine {
 
     /// Gets a read-only set of all registered [`TagSpec`]s.
     /// This will not include specification data for tag groups, only proper tags.
+    ///
     /// [`TagSpec`]: ./tag/spec.html
     #[inline]
     pub fn get_specs(&self) -> &HashMap<Tag, TagSpec> {
@@ -93,6 +96,7 @@ impl Engine {
     }
 
     /// Gets a read-only set of all registered [`Role`]s.
+    ///
     /// [`Role`]: ./tag/role.html
     #[inline]
     pub fn get_roles(&self) -> &HashSet<Role> {
@@ -100,6 +104,7 @@ impl Engine {
     }
 
     /// Gets the specification associated with a [`Tag`].
+    ///
     /// [`Tag`]: ./tag/tag.html
     pub fn get_spec(&self, tag: &Tag) -> Result<&TagSpec> {
         match self.specs.get(tag) {
@@ -109,6 +114,7 @@ impl Engine {
     }
 
     /// Gets the specification associated a [`Tag`] as `&mut`.
+    ///
     /// [`Tag`]: ./tag/tag.html
     pub fn get_spec_mut(&mut self, tag: &Tag) -> Result<&mut TagSpec> {
         match self.specs.get_mut(tag) {
@@ -118,6 +124,7 @@ impl Engine {
     }
 
     /// Determines if a [`Tag`] with the given name is registered.
+    ///
     /// [`Tag`]: ./tag/tag.html
     pub fn has_tag<B: Borrow<str>>(&self, name: B) -> bool {
         let name = name.borrow();
@@ -126,6 +133,7 @@ impl Engine {
     }
 
     /// Gets the [`Tag`] with the given name.
+    ///
     /// [`Tag`]: ./tag/tag.html
     pub fn get_tag<B: Borrow<str>>(&self, name: B) -> Result<Tag> {
         let name = name.borrow();
@@ -137,12 +145,14 @@ impl Engine {
     }
 
     /// Determines if the given [`Tag`] is present as a group.
+    ///
     /// [`Tag`]: ./tag/tag.html
     pub fn is_group(&self, tag: &Tag) -> bool {
         self.tags.contains(tag) && self.specs.get(tag).is_none()
     }
 
     /// Determines if a [`Role`] with the given name is registered.
+    ///
     /// [`Role`]: ./tag/role.html
     pub fn has_role<B: Borrow<str>>(&self, name: B) -> bool {
         let name = name.borrow();
@@ -151,6 +161,7 @@ impl Engine {
     }
 
     /// Gets the [`Role`] with the given name.
+    ///
     /// [`Role`]: ./tag/role.html
     pub fn get_role<B: Borrow<str>>(&self, name: B) -> Result<Role> {
         let name = name.borrow();
