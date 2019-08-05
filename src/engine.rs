@@ -216,14 +216,14 @@ impl Engine {
     /// Validates the given list of tag changes against the engine's tag policies.
     pub fn check_tag_changes(
         &self,
+        tags: &[Tag],
         added_tags: &[Tag],
         removed_tags: &[Tag],
-        tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
         for tag in tags {
             let spec = self.get_spec(&tag)?;
-            spec.check_tag_changes(self, added_tags, removed_tags, tags, roles)?;
+            spec.check_tag_changes(self, tags, added_tags, removed_tags, roles)?;
         }
 
         Ok(())

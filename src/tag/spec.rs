@@ -144,7 +144,7 @@ impl TagSpec {
     /// [`Tag`]: ./struct.Tag.html
     #[inline]
     pub fn check_tags(&self, engine: &Engine, tags: &[Tag]) -> Result<()> {
-        self.check_tag_changes(engine, &[], &[], tags, &[])
+        self.check_tag_changes(engine, tags, &[], &[], &[])
     }
 
     /// Checks that the given [`Tag`]s changes with the policy described in the [`Engine`].
@@ -160,9 +160,9 @@ impl TagSpec {
     pub fn check_tag_changes(
         &self,
         engine: &Engine,
+        tags: &[Tag],
         added_tags: &[Tag],
         removed_tags: &[Tag],
-        tags: &[Tag],
         roles: &[Role],
     ) -> Result<()> {
         // Check for tags that are both added and removed
