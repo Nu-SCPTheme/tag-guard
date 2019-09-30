@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use crate::{Error, Result};
 use crate::prelude::*;
+use crate::{Error, Result};
 
 /// Input specification of a tag's requirements.
 ///
@@ -203,8 +203,8 @@ impl TagSpec {
             // to avoid getting a false-positive on ourselves.
 
             let limit = if engine.is_group(conflicts) {
-                let self_matches =
-                    engine.check_tag(&self.tag, tags)? || engine.check_tag(&self.tag, added_tags)?;
+                let self_matches = engine.check_tag(&self.tag, tags)?
+                    || engine.check_tag(&self.tag, added_tags)?;
 
                 usize::from(self_matches)
             } else {

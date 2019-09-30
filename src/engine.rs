@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
-use crate::{Error, Result};
 use crate::prelude::*;
+use crate::{Error, Result};
 use std::borrow::Borrow;
 use std::collections::{HashMap, HashSet};
 
@@ -237,7 +237,6 @@ impl Engine {
                 ));
             }
         }
-
 
         for tag in tags {
             let spec = self.get_spec(&tag)?;

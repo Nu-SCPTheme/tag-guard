@@ -17,7 +17,7 @@ fn test_has_tags() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $tag:expr, $result:expr) => (
+        ($tags:expr, $tag:expr, $result:expr) => {
             let tag = Tag::new($tag);
             let result = engine.check_tag(&tag, &$tags).unwrap();
             assert_eq!(
@@ -28,7 +28,7 @@ fn test_has_tags() {
                 if $result { "" } else { "not " },
                 $tags,
             );
-        )
+        };
     }
 
     let tags = [
@@ -60,11 +60,11 @@ fn test_count_tags() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $tag:expr, $count:expr) => (
+        ($tags:expr, $tag:expr, $count:expr) => {
             let tag = Tag::new($tag);
             let count = engine.count_tag(&tag, &$tags).unwrap();
             assert_eq!(count, $count);
-        )
+        };
     }
 
     let tags = [

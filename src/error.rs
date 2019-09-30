@@ -10,9 +10,9 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
+use super::{Role, Tag};
 use std::error::Error as StdError;
 use std::fmt::{self, Display};
-use super::{Role, Tag};
 
 /// An enum to represent various tagging errors.
 #[must_use = "should handle errors"]
@@ -66,7 +66,7 @@ impl StdError for Error {
         }
     }
 
-    fn source(&self) -> Option<&(StdError + 'static)> {
+    fn source(&self) -> Option<&(dyn StdError + 'static)> {
         None
     }
 }

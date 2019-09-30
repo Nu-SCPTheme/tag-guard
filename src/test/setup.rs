@@ -166,7 +166,7 @@ pub fn setup() -> Engine {
         TemplateTagSpec {
             groups: vec![Tag::new("goi")],
             ..TemplateTagSpec::default()
-        }
+        },
     );
 
     engine.add_tag(
@@ -174,7 +174,7 @@ pub fn setup() -> Engine {
         TemplateTagSpec {
             groups: vec![Tag::new("goi")],
             ..TemplateTagSpec::default()
-        }
+        },
     );
 
     engine.add_tag(
@@ -182,7 +182,7 @@ pub fn setup() -> Engine {
         TemplateTagSpec {
             groups: vec![Tag::new("goi")],
             ..TemplateTagSpec::default()
-        }
+        },
     );
 
     engine.add_tag("co-authored", TemplateTagSpec::default());

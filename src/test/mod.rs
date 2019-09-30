@@ -17,6 +17,6 @@ mod exists;
 mod setup;
 
 mod prelude {
-    pub use crate::prelude::*;
     pub use super::setup::setup;
+    pub use crate::prelude::*;
 }

@@ -17,10 +17,10 @@ fn test_good_changes() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => (
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => {
             let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
             assert_eq!(result, Ok(()));
-        )
+        };
     }
 
     // Tag additions
@@ -32,7 +32,11 @@ fn test_good_changes() {
     );
 
     check!(
-        &[Tag::new("scp"), Tag::new("amorphous"), Tag::new("electronic")],
+        &[
+            Tag::new("scp"),
+            Tag::new("amorphous"),
+            Tag::new("electronic")
+        ],
         &[Tag::new("safe")],
         &[],
         &[]
@@ -54,7 +58,12 @@ fn test_good_changes() {
 
     // Tag removals
     check!(
-        &[Tag::new("scp"), Tag::new("esoteric-class"), Tag::new("antimemetic"), Tag::new("electronic")],
+        &[
+            Tag::new("scp"),
+            Tag::new("esoteric-class"),
+            Tag::new("antimemetic"),
+            Tag::new("electronic")
+        ],
         &[],
         &[Tag::new("electronic")],
         &[]
@@ -109,10 +118,10 @@ fn test_bad_changes() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => (
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => {
             let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
             assert_eq!(result, Err($error));
-        )
+        };
     }
 
     // Incompatible tags
@@ -164,10 +173,10 @@ fn test_invalid_tags() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => (
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr, $error:expr) => {
             let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
             assert_eq!(result, Err($error));
-        )
+        };
     }
 
     // No tag registered
@@ -194,19 +203,14 @@ fn test_misc() {
     let engine = setup();
 
     macro_rules! check {
-        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => (
+        ($tags:expr, $added_tags:expr, $removed_tags:expr, $roles:expr) => {
             let result = engine.check_tag_changes($tags, $added_tags, $removed_tags, $roles);
             match result {
                 Err(Error::Other(_)) => (),
                 _ => panic!("Expected Error::Other, got {:#?}", result),
             }
-        )
+        };
     }
 
-    check!(
-        &[],
-        &[Tag::new("tale")],
-        &[Tag::new("tale")],
-        &[]
-    );
+    check!(&[], &[Tag::new("tale")], &[Tag::new("tale")], &[]);
 }

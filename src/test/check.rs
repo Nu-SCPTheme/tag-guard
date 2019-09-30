@@ -17,9 +17,9 @@ fn test_good_tags() {
     let engine = setup();
 
     macro_rules! check {
-        ($check_tags:expr) => (
+        ($check_tags:expr) => {
             engine.check_tags(&$check_tags).unwrap()
-        )
+        };
     }
 
     check!([
@@ -38,12 +38,12 @@ fn test_no_tags() {
     let engine = setup();
 
     macro_rules! check {
-        ($check_tags:expr, $err_tag:expr) => (
+        ($check_tags:expr, $err_tag:expr) => {
             match engine.check_tags(&$check_tags).unwrap_err() {
                 Error::MissingTag(tag) => assert_eq!(tag, Tag::new($err_tag)),
                 error => panic!("Error wasn't MissingTag: {:?}", error),
             }
-        )
+        };
     }
 
     check!(
@@ -59,12 +59,12 @@ fn test_requires() {
     let engine = setup();
 
     macro_rules! check {
-        ($check_tags:expr, $err_tags:expr) => (
+        ($check_tags:expr, $err_tags:expr) => {
             match engine.check_tags(&$check_tags).unwrap_err() {
                 Error::RequiresTags(_, tags) => assert_eq!(tags, $err_tags),
                 error => panic!("Error wasn't RequiresTags: {:?}", error),
             }
-        )
+        };
     }
 
     check!(
@@ -83,15 +83,15 @@ fn test_conflicts() {
     let engine = setup();
 
     macro_rules! check {
-        ($check_tags:expr, $first_err_tag:expr, $second_err_tag:expr) => (
+        ($check_tags:expr, $first_err_tag:expr, $second_err_tag:expr) => {
             match engine.check_tags(&$check_tags).unwrap_err() {
                 Error::IncompatibleTags(first_tag, second_tag) => {
                     assert_eq!(first_tag, $first_err_tag);
                     assert_eq!(second_tag, $second_err_tag);
-                },
+                }
                 error => panic!("Error wasn't IncompatibleTags: {:?}", error),
             }
-        )
+        };
     }
 
     check!(
