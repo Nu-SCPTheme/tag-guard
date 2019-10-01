@@ -1,5 +1,5 @@
 /*
- * tag/tag.rs
+ * tag/object.rs
  *
  * tag-guard - Configurable tag enforcement library
  * Copyright (c) 2019 Ammon Smith

@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See the LICENSE file for more details.
  */
 
+mod object;
 mod role;
 mod spec;
-mod tag;
 
+pub use self::object::Tag;
 pub use self::role::Role;
 pub use self::spec::{TagSpec, TemplateTagSpec};
-pub use self::tag::Tag;
