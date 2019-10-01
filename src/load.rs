@@ -85,11 +85,7 @@ impl Configuration {
 
         // Remove old tags
         for extant_tag in &extant_tags {
-            let contains = tags
-                .iter()
-                .find(|tag| tag.name == extant_tag.as_ref())
-                .is_some();
-
+            let contains = tags.iter().any(|tag| tag.name == extant_tag.as_ref());
             if !contains {
                 engine.delete_tag(&extant_tag);
             }

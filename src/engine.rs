@@ -48,7 +48,7 @@ impl Engine {
         self.specs.remove(tag);
         self.tags.remove(tag);
 
-        for (_, spec) in &mut self.specs {
+        for spec in self.specs.values_mut() {
             spec.required_tags.retain(|t| t != tag);
             spec.conflicting_tags.retain(|t| t != tag);
         }
@@ -65,7 +65,7 @@ impl Engine {
     pub fn delete_group(&mut self, group: &Tag) {
         self.tags.remove(group);
 
-        for (_, spec) in &mut self.specs {
+        for spec in self.specs.values_mut() {
             spec.groups.retain(|g| g != group);
         }
     }
@@ -81,7 +81,7 @@ impl Engine {
     pub fn delete_role(&mut self, role: &Role) {
         self.roles.remove(role);
 
-        for (_, spec) in &mut self.specs {
+        for spec in self.specs.values_mut() {
             spec.needed_roles.retain(|r| r != role);
         }
     }
