@@ -8,4 +8,4 @@ edition = "2018" # this refers to the Cargo.toml version
 [dependencies]
 easy_strings = "0.2"
 serde = { version = "1", features = ["derive"] }
-str-macro = "0.1"
+str-macro = "1.0"
